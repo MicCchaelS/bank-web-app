@@ -1,17 +1,16 @@
 package ru.example.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "clients")
-@Data
-@NoArgsConstructor
 public class Client {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +39,16 @@ public class Client {
     })
     private List<Account> accounts;
 
+    public Client() {
+    }
+
     public void addAccount(Account account) {
         this.accounts.add(account);
         account.setClient(this);
     }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof Client;
+    }
+
 }

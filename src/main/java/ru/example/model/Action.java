@@ -2,7 +2,6 @@ package ru.example.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import ru.example.model.enums.OperationType;
 
 import java.time.LocalDateTime;
@@ -10,8 +9,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "actions")
 @Data
-@NoArgsConstructor
 public class Action {
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
