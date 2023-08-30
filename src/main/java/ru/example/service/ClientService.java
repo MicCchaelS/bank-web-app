@@ -9,7 +9,7 @@ public interface ClientService {
 
     public List<Client> findAll();
     public Optional<Client> findById(int id);
-    public Client create();
-    public Optional<Client> update(int id);
+    public int create(Client client);
+    public void update(Client client);
     public boolean delete(int id);
 }
