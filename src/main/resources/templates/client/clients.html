@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Клиенты банка</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+</head>
+<body>
+
+<div align="center">
+    <h2>Клиенты банка</h2>
+    <hr>
+</div>
+
+<div align="center">
+    <div th:if="${clients.isEmpty()}">
+        <p>Список клиентов пуст</p>
+    </div>
+</div>
+
+<div align="center">
+    <form th:method="GET" th:action="@{/api/clients/new}">
+        <input type="submit" value="Добавить клиента"/>
+    </form>
+    <br>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div th:if="${!clients.isEmpty()}">
+                <table id="example" class="table table-bordered" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Фамилия</th>
+                        <th>Имя</th>
+                        <th>Отчество</th>
+                        <th>Полная информация</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="client : ${clients}">
+                        <td th:text="${clientStat.index+1}">№</td>
+                        <td th:text="${client.lastName}">Фамилия</td>
+                        <td th:text="${client.firstName}">Имя</td>
+                        <td th:text="${client.middleName}">Отчество</td>
+                        <td>
+                            <form th:method="GET"
+                                  th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
+                                <input type="submit" value="Подробнее"/>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

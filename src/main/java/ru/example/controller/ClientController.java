@@ -36,7 +36,7 @@ public class ClientController {
 
     @PostMapping
     public String create(Client client) {
-        return "redirect:/api/client/client/" + clientService.create(client);
+        return "redirect:/api/clients/" + clientService.create(client);
     }
 
     @GetMapping("/{id}/edit")

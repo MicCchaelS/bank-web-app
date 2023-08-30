@@ -2,6 +2,7 @@ package ru.example.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Client {
     @Column(name = "middle_name")
     private String middleName;
 
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
