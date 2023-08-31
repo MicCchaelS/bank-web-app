@@ -1,54 +1,56 @@
 package ru.example.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import ru.example.service.AccountService;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/api/clients/{clientId}/accounts")
 public class AccountController {
 
-    @GetMapping
-    public String findAll() {
+    private final AccountService accountService;
 
+    @GetMapping
+    public String findAllAccounts(@PathVariable("clientId") int clientId, Model model) {
+        model.addAttribute("accounts", accountService.findAllByClientId(clientId));
         return "account/accounts";
     }
 
-    @GetMapping("/{id}")
-    public String findById(@PathVariable("id") int id, Model model) {
-
+    @GetMapping("/{accountId}")
+    public String findAccountById(@PathVariable("accountId") int accountId, Model model) {
+        model.addAttribute("account", accountService.findAccountById(accountId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
         return "account/account";
-    }
-
-    @GetMapping("/new")
-    public String newClient() {
-
-        return "account/newAccount";
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(Model model) {
-
-        return "redirect:/api/clients/{clientId}/accounts"; //+ "id";
+    public String createAccount(@PathVariable("clientId") int clientId) {
+        return "redirect:/api/clients/{clientId}/accounts/" + accountService.saveAccount(clientId);
     }
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-
-        return "redirect:/api/clients";
+    @DeleteMapping("/{accountId}")
+    public String deleteAccount(@PathVariable("accountId") int accountId, @PathVariable("clientId") int clientId) {
+        if (!accountService.deleteAccount(accountId, clientId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/api/clients/{clientId}/accounts";
     }
 
-//    @PostMapping("/top-up")
-//    public String topUp() {
+//    @PatchMapping("/top-up-balance")
+//    public String topUpBalance() {
 //
-//        return "redirect:/api/clients/{clientId}/accounts"; //+ "id";
+//        return "redirect:/api/clients/{clientId}/accounts/" //+ "id";
 //    }
 //
-//    @PostMapping("/withdraw")
-//    public String withdraw() {
+//    @PatchMapping("/withdraw-money")
+//    public String withdrawMoney() {
 //
-//        return "redirect:/api/clients/{clientId}/accounts"; //+ "id";
+//        return "redirect:/api/clients/{clientId}/accounts/" //+ "id";
 //    }
 }

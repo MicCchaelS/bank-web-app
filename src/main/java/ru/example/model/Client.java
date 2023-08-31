@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -41,16 +42,15 @@ public class Client {
     })
     private List<Account> accounts;
 
-    public Client() {
-    }
-
     public void addAccount(Account account) {
-        this.accounts.add(account);
+        if (accounts == null) {
+            accounts = new ArrayList<>();
+        }
+        accounts.add(account);
         account.setClient(this);
     }
 
-    protected boolean canEqual(final Object other) {
-        return other instanceof Client;
+    public void removeAccount(Account account) {
+        accounts.remove(account);
     }
-
 }

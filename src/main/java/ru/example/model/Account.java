@@ -2,7 +2,9 @@ package ru.example.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import ru.example.model.enums.AccountStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +23,10 @@ public class Account {
     @Column(name = "balance")
     private int balance;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private AccountStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
@@ -34,7 +40,10 @@ public class Account {
     private List<Action> actions;
 
     public void addAction(Action action) {
-        this.actions.add(action);
+        if (actions == null) {
+            actions = new ArrayList<>();
+        }
+        actions.add(action);
         action.setAccount(this);
     }
 }

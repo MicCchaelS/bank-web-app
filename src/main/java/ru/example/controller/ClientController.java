@@ -17,14 +17,14 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping
-    public String findAll(Model model) {
-        model.addAttribute("clients", clientService.findAll());
+    public String findAllClients(Model model) {
+        model.addAttribute("clients", clientService.findAllClients());
         return "client/clients";
     }
 
     @GetMapping("/{id}")
-    public String findById(@PathVariable("id") int id, Model model) {
-        model.addAttribute("client", clientService.findById(id)
+    public String findClientById(@PathVariable("id") int id, Model model) {
+        model.addAttribute("client", clientService.findClientById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
         return "client/client";
     }
@@ -35,26 +35,27 @@ public class ClientController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public String create(Client client) {
-        return "redirect:/api/clients/" + clientService.create(client);
+        return "redirect:/api/clients/" + clientService.saveClient(client);
     }
 
     @GetMapping("/{id}/edit")
     public String editClient(@PathVariable("id") int id, Model model) {
-        model.addAttribute("client", clientService.findById(id)
+        model.addAttribute("client", clientService.findClientById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
         return "client/editClient";
     }
 
     @PatchMapping("/{id}")
-    public String update(Client client) {
-        clientService.update(client);
+    public String updateClient(Client client) {
+        clientService.updateClient(client);
         return "redirect:/api/clients/{id}";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
-        if (!clientService.delete(id)) {
+    public String deleteClient(@PathVariable("id") int id) {
+        if (!clientService.deleteClient(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return "redirect:/api/clients";

@@ -18,31 +18,31 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     @Override
-    public List<Client> findAll() {
+    public List<Client> findAllClients() {
         return clientRepository.findAll();
     }
 
     @Override
-    public Optional<Client> findById(int id) {
+    public Optional<Client> findClientById(int id) {
         return clientRepository.findById(id);
     }
 
     @Transactional
     @Override
-    public int create(Client client) {
+    public int saveClient(Client client) {
         return clientRepository.save(client).getId();
     }
 
     @Transactional
     @Override
-    public void update(Client client) {
+    public void updateClient(Client client) {
         clientRepository.save(client);
     }
 
     @Transactional
     @Override
-    public boolean delete(int id) {
-        if (clientRepository.findById(id).isPresent()) {
+    public boolean deleteClient(int id) {
+        if (clientRepository.existsById(id)) {
             clientRepository.deleteById(id);
             return true;
         }
