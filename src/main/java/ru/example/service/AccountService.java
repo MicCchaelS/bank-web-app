@@ -10,5 +10,5 @@ public interface AccountService {
     public List<Account> findAllByClientId(int clientId);
     public Optional<Account> findAccountById(int accountId);
     public int saveAccount(int clientId);
-    public boolean deleteAccount(int accountId, int clientId);
+    public boolean closeAccount(int accountId, int clientId);
 }

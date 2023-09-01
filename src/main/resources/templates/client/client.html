@@ -32,7 +32,7 @@
 
     <hr>
     <form th:method="DELETE"
-          th:action="@{/api/clients/{clientId}/(clientId=${client.id})}">
+          th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
         <input type="submit" value="Удалить клиента"/>
     </form>
 </div>

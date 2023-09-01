@@ -35,7 +35,6 @@ public class ClientController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public String create(Client client) {
         return "redirect:/api/clients/" + clientService.saveClient(client);
     }

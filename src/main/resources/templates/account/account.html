@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Банковский счёт</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+</head>
+<body>
+
+<div align="center">
+    <h2>Информация о банковском счёте</h2>
+
+    <hr>
+    <p th:text="'Номер счёта: ' + ${account.accountNumber}"/>
+    <p th:text="'Баланс: ' + ${account.balance}"/>
+    <p th:text="'Статус: ' + ${account.status}"/>
+
+    <hr>
+    <form th:method="PATCH"
+          th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up-balance
+                                    (clientId=${clientId}, accountId=${account.id})}">
+        <input type="submit" value="Пополнить баланс счёта"/>
+    </form>
+
+    <hr>
+    <form th:method="PATCH"
+          th:action="@{/api/clients/{clientId}/accounts/{accountId}/withdraw-money
+                                    (clientId=${clientId}, accountId=${account.id})}">
+        <input type="submit" value="Снять деньги со счёта"/>
+    </form>
+
+    <hr>
+    <form th:method="PATCH"
+          th:action="@{/api/clients/{clientId}/accounts/{accountId}
+                                    (clientId=${clientId}, accountId=${account.id})}">
+        <input type="submit" value="Закрыть счёт"/>
+    </form>
+</div>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

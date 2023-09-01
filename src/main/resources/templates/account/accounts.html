@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Банковские счета</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+</head>
+<body>
+
+<div align="center">
+    <h2>Банковские счета клиента</h2>
+    <hr>
+</div>
+
+<div align="center">
+    <div th:if="${accounts.isEmpty()}">
+        <p>Нет открытых банковских счетов</p>
+        <hr>
+    </div>
+</div>
+
+<div align="center">
+    <form th:method="POST" th:action="@{/api/clients/{clientId}/accounts(clientId=${clientId})}">
+        <input type="submit" value="Создать новый счёт"/>
+    </form>
+    <br>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div th:if="${!accounts.isEmpty()}">
+                <table id="example" class="table table-bordered" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Номер счёта</th>
+                        <th>Баланс</th>
+                        <th>Статус</th>
+                        <th>Полная информация</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="account : ${accounts}">
+                        <td th:text="${accountStat.index+1}">№</td>
+                        <td th:text="${account.accountNumber}">Номер счёта</td>
+                        <td th:text="${account.balance}">Баланс</td>
+                        <td th:text="${account.status}">Статус</td>
+                        <td>
+                            <form th:method="GET"
+                                  th:action="@{/api/clients/{clientId}/accounts/{accountId}
+                                                            (clientId=${clientId}, accountId=${account.id})}">
+                                <input type="submit" value="Подробнее"/>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

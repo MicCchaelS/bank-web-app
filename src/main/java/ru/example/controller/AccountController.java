@@ -18,39 +18,41 @@ public class AccountController {
     @GetMapping
     public String findAllAccounts(@PathVariable("clientId") int clientId, Model model) {
         model.addAttribute("accounts", accountService.findAllByClientId(clientId));
+        model.addAttribute("clientId", clientId);
         return "account/accounts";
     }
 
     @GetMapping("/{accountId}")
-    public String findAccountById(@PathVariable("accountId") int accountId, Model model) {
+    public String findAccountById(Model model, @PathVariable("accountId") int accountId,
+                                  @PathVariable("clientId") int clientId) {
         model.addAttribute("account", accountService.findAccountById(accountId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        model.addAttribute("clientId", clientId);
         return "account/account";
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public String createAccount(@PathVariable("clientId") int clientId) {
         return "redirect:/api/clients/{clientId}/accounts/" + accountService.saveAccount(clientId);
     }
 
-    @DeleteMapping("/{accountId}")
-    public String deleteAccount(@PathVariable("accountId") int accountId, @PathVariable("clientId") int clientId) {
-        if (!accountService.deleteAccount(accountId, clientId)) {
+    @PatchMapping("/{accountId}")
+    public String closeAccount(@PathVariable("accountId") int accountId, @PathVariable("clientId") int clientId) {
+        if (!accountService.closeAccount(accountId, clientId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return "redirect:/api/clients/{clientId}/accounts";
     }
 
-//    @PatchMapping("/top-up-balance")
-//    public String topUpBalance() {
-//
-//        return "redirect:/api/clients/{clientId}/accounts/" //+ "id";
-//    }
-//
-//    @PatchMapping("/withdraw-money")
-//    public String withdrawMoney() {
-//
-//        return "redirect:/api/clients/{clientId}/accounts/" //+ "id";
-//    }
+    @PatchMapping("/top-up-balance")
+    public String topUpBalance() {
+        //todo
+        return "redirect:/api/clients/{clientId}/accounts/"; // + "id"
+    }
+
+    @PatchMapping("/withdraw-money")
+    public String withdrawMoney() {
+        //todo
+        return "redirect:/api/clients/{clientId}/accounts/"; // + "id"
+    }
 }

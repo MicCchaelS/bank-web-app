@@ -42,31 +42,23 @@ public class AccountServiceImpl implements AccountService {
         Client client = clientService.findClientById(clientId).get();
         client.addAccount(account);
 
-        return account.getId();
+        return accountRepository
+                .findAccountByAccountNumber(account.getAccountNumber())
+                .get()
+                .getId();
     }
 
     @Transactional
     @Override
-    public boolean deleteAccount(int accountId, int clientId) {
+    public boolean closeAccount(int accountId, int clientId) {
         if (accountRepository.existsById(accountId)) {
-            Account account = accountRepository.findById(accountId).get();
+            Account account = findAccountById(accountId).get();
 //            if (account.getBalance() != 0) {
-//
 //                //todo Ошибка, сначала снимите все деньги со счёта
 //            }
 
-            /*
-             * Банковский счёт продолжает существовать в базе данных и имеет статус "закрыт" для того,
-             * чтобы продолжать иметь доступ ко всем операциям, которые выполнялись на счёте, а также
-             * видеть кто был клиентом. В списке банковских счетов клиента этот счёт уже не будет отображаться
-             */
-
             account.setStatus(AccountStatus.CLOSED);
-            Client client = clientService.findClientById(clientId).get();
-            client.removeAccount(account);
-
             accountRepository.save(account);
-            clientService.saveClient(client);
             return true;
         }
         return false;
@@ -74,7 +66,7 @@ public class AccountServiceImpl implements AccountService {
 
     /** Генерация номера банковского счёта при его создании */
     private String generateAccountNumber() {
-        // Код валюты (рубль) для нумерации всех банковских счетов
+        // Код валюты (рубль) для нумерации всех банковских счетов в этой валюте
         final String RUB_CURRENCY_CODE = "810";
 
         StringBuilder sb = new StringBuilder();

@@ -49,8 +49,4 @@ public class Client {
         accounts.add(account);
         account.setClient(this);
     }
-
-    public void removeAccount(Account account) {
-        accounts.remove(account);
-    }
 }
