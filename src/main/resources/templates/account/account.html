@@ -16,30 +16,46 @@
     <p th:text="'Баланс: ' + ${account.balance}"/>
     <p th:text="'Статус: ' + ${account.status}"/>
 
-    <hr>
-    <form th:method="PATCH"
-          th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up-balance
-                                    (clientId=${clientId}, accountId=${account.id})}">
-        <input type="submit" value="Пополнить баланс счёта"/>
-    </form>
+    <div th:if="${!account.getStatus().name().equals('CLOSED')}">
 
-    <hr>
-    <form th:method="PATCH"
-          th:action="@{/api/clients/{clientId}/accounts/{accountId}/withdraw-money
-                                    (clientId=${clientId}, accountId=${account.id})}">
-        <input type="submit" value="Снять деньги со счёта"/>
-    </form>
+        <hr>
+        <form th:method="PATCH"
+              th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up
+                                    (clientId=${clientId}, accountId=${account.id})}"
+              th:object="${account}">
+            <h4>Пополнение баланса счёта</h4>
+            <label for="topUpAmount">Введите сумму, которую требуется зачислить: </label>
+            <input type="text" th:field="*{amount}" id="topUpAmount"/>
+            <input type="submit" value="Пополнить"/>
+            <div style="color:red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+            <br>
 
-    <hr>
-    <form th:method="PATCH"
-          th:action="@{/api/clients/{clientId}/accounts/{accountId}
+        </form>
+
+        <hr>
+        <form th:method="PATCH"
+              th:action="@{/api/clients/{clientId}/accounts/{accountId}/withdraw
+                                    (clientId=${clientId}, accountId=${account.id})}"
+              th:object="${account}">
+            <h4>Снятие денег со счёта</h4>
+            <label for="withdrawAmount">Введите сумму, которую требуется снять: </label>
+            <input type="text" th:field="*{amount}" id="withdrawAmount"/>
+            <input type="submit" value="Снять"/>
+            <div style="color:red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+            <br>
+        </form>
+
+        <hr>
+        <form th:method="PATCH"
+              th:action="@{/api/clients/{clientId}/accounts/{accountId}/close
                                     (clientId=${clientId}, accountId=${account.id})}">
-        <input type="submit" value="Закрыть счёт"/>
-    </form>
+            <h4>Закрытие текущего счёта</h4>
+            <input type="submit" value="Закрыть"/>
+        </form>
+
+    </div>
 </div>
 
-<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
 
 </body>

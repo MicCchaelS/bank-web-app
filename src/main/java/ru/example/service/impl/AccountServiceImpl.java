@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.example.model.Account;
-import ru.example.model.Client;
 import ru.example.model.enums.AccountStatus;
+import ru.example.model.enums.OperationType;
 import ru.example.repository.AccountRepository;
 import ru.example.service.AccountService;
+import ru.example.service.ActionService;
 import ru.example.service.ClientService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -21,6 +23,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final ClientService clientService;
+    private final ActionService actionService;
 
     @Override
     public List<Account> findAllByClientId(int clientId) {
@@ -35,33 +38,84 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public int saveAccount(int clientId) {
-        Account account = new Account();
+        var account = new Account();
         account.setAccountNumber(generateAccountNumber());
         account.setStatus(AccountStatus.OPEN);
+        account.setBalance(new BigDecimal(0));
 
-        Client client = clientService.findClientById(clientId).get();
+        var client = clientService.findClientById(clientId).get();
         client.addAccount(account);
 
-        return accountRepository
-                .findAccountByAccountNumber(account.getAccountNumber())
-                .get()
-                .getId();
+        var action = actionService.createNewAction(OperationType.ACCOUNT_CREATION,
+                null, new BigDecimal(0));
+        account.addAction(action);
+
+        return accountRepository.save(account).getId();
     }
 
     @Transactional
     @Override
-    public boolean closeAccount(int accountId, int clientId) {
-        if (accountRepository.existsById(accountId)) {
-            Account account = findAccountById(accountId).get();
-//            if (account.getBalance() != 0) {
-//                //todo Ошибка, сначала снимите все деньги со счёта
-//            }
+    public void topUpAccountBalance(int accountId, BigDecimal amount) {
+        var account = findAccountById(accountId).get();
 
-            account.setStatus(AccountStatus.CLOSED);
-            accountRepository.save(account);
-            return true;
-        }
-        return false;
+//        if (account.getStatus().name().equals("CLOSED")) {
+//            //todo Ошибка: счёт закрыт
+//        }
+
+//        final BigDecimal MAX_BALANCE = new BigDecimal(1_000_000_000);
+        BigDecimal newBalance = account.getBalance().add(amount);
+//        if (newBalance.compareTo(MAX_BALANCE) > 0) {
+//            //todo Ошибка: максимальная сумма, которая может храниться на балансе счёта - 1 000 000 000 рублей
+//        }
+
+        account.setBalance(newBalance);
+
+        var action = actionService.createNewAction(OperationType.REPLENISHMENT,
+                amount, account.getBalance());
+
+        account.addAction(action);
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    @Override
+    public void withdrawMoneyFromAccountBalance(int accountId, BigDecimal amount) {
+        var account = findAccountById(accountId).get();
+//        if (account.getStatus().name().equals("CLOSED")) {
+//            //todo Ошибка: счёт закрыт
+//        }
+
+//        if (amount.compareTo(account.getBalance()) > 0) {
+//            //todo Ошибка: на балансе недостаточно средств
+//        }
+
+        account.setBalance(account.getBalance().subtract(amount));
+
+        var action = actionService.createNewAction(OperationType.WITHDRAWAL,
+                amount, account.getBalance());
+
+        account.addAction(action);
+        accountRepository.save(account);
+    }
+
+    @Transactional
+    @Override
+    public void closeAccount(int accountId) {
+        var account = findAccountById(accountId).get();
+//        if (account.getStatus().name().equals("CLOSED")) {
+//            //todo Ошибка: счёт уже закрыт
+//        }
+
+//      if (account.getBalance() != 0) {
+//          //todo Ошибка: сначала снимите все деньги со счёта
+//      }
+
+        var action = actionService.createNewAction(OperationType.ACCOUNT_REMOVAL,
+                null, account.getBalance());
+        account.addAction(action);
+
+        account.setStatus(AccountStatus.CLOSED);
+        accountRepository.save(account);
     }
 
     /** Генерация номера банковского счёта при его создании */
@@ -69,7 +123,7 @@ public class AccountServiceImpl implements AccountService {
         // Код валюты (рубль) для нумерации всех банковских счетов в этой валюте
         final String RUB_CURRENCY_CODE = "810";
 
-        StringBuilder sb = new StringBuilder();
+        var sb = new StringBuilder();
         for (int i = 0; i < 20; i++) {
             if (i == 5) {
                 sb.append(RUB_CURRENCY_CODE);

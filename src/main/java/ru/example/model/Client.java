@@ -8,9 +8,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "clients")
+@Data
+@EqualsAndHashCode(exclude = "accounts")
+@ToString(exclude = "accounts")
 public class Client {
 
     @Id

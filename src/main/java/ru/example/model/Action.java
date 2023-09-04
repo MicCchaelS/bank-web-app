@@ -2,13 +2,18 @@ package ru.example.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import ru.example.model.enums.OperationType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "actions")
 @Data
+@EqualsAndHashCode(exclude = "account")
+@ToString(exclude = "account")
 public class Action {
 
     @Id
@@ -21,10 +26,10 @@ public class Action {
     private OperationType operationType;
 
     @Column(name = "amount")
-    private int amount;
+    private BigDecimal amount;
 
     @Column(name = "reminder")
-    private int reminder;
+    private BigDecimal reminder;
 
     @Column(name = "operation_date")
     private LocalDateTime operationDate;

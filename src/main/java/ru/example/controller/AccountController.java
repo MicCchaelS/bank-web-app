@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.example.model.Account;
 import ru.example.service.AccountService;
 
 @Controller
@@ -36,23 +37,21 @@ public class AccountController {
         return "redirect:/api/clients/{clientId}/accounts/" + accountService.saveAccount(clientId);
     }
 
-    @PatchMapping("/{accountId}")
-    public String closeAccount(@PathVariable("accountId") int accountId, @PathVariable("clientId") int clientId) {
-        if (!accountService.closeAccount(accountId, clientId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+    @PatchMapping("/{accountId}/top-up")
+    public String topUpBalance(@PathVariable("accountId") int accountId, Account account) {
+        accountService.topUpAccountBalance(accountId, account.getAmount());
+        return "redirect:/api/clients/{clientId}/accounts/{accountId}";
+    }
+
+    @PatchMapping("/{accountId}/withdraw")
+    public String withdrawMoney(@PathVariable("accountId") int accountId, Account account) {
+        accountService.withdrawMoneyFromAccountBalance(accountId, account.getAmount());
+        return "redirect:/api/clients/{clientId}/accounts/{accountId}";
+    }
+
+    @PatchMapping("/{accountId}/close")
+    public String closeAccount(@PathVariable("accountId") int accountId) {
+        accountService.closeAccount(accountId);
         return "redirect:/api/clients/{clientId}/accounts";
-    }
-
-    @PatchMapping("/top-up-balance")
-    public String topUpBalance() {
-        //todo
-        return "redirect:/api/clients/{clientId}/accounts/"; // + "id"
-    }
-
-    @PatchMapping("/withdraw-money")
-    public String withdrawMoney() {
-        //todo
-        return "redirect:/api/clients/{clientId}/accounts/"; // + "id"
     }
 }
