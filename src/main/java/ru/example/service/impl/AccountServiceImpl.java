@@ -7,9 +7,9 @@ import ru.example.model.Account;
 import ru.example.model.enums.AccountStatus;
 import ru.example.model.enums.OperationType;
 import ru.example.repository.AccountRepository;
+import ru.example.repository.ClientRepository;
 import ru.example.service.AccountService;
 import ru.example.service.ActionService;
-import ru.example.service.ClientService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final ClientService clientService;
+    private final ClientRepository clientRepository;
     private final ActionService actionService;
 
     @Override
@@ -43,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
         account.setStatus(AccountStatus.OPEN);
         account.setBalance(new BigDecimal(0));
 
-        var client = clientService.findClientById(clientId).get();
+        var client = clientRepository.findById(clientId).get();
         client.addAccount(account);
 
         var action = actionService.createNewAction(OperationType.ACCOUNT_CREATION,
