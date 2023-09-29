@@ -1,8 +1,9 @@
 package ru.example.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,19 +30,13 @@ public class Client {
     @Column(name = "middle_name")
     private String middleName;
 
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @Column(name = "snils")
     private String snils;
 
-    @OneToMany(mappedBy = "client", cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    })
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Account> accounts;
 
     public void addAccount(Account account) {

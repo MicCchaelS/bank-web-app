@@ -3,6 +3,8 @@ package ru.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.example.dto.account.AccountDTO;
+import ru.example.dto.account.AccountsDTO;
 import ru.example.model.Account;
 import ru.example.model.enums.AccountStatus;
 import ru.example.model.enums.OperationType;
@@ -10,6 +12,7 @@ import ru.example.repository.AccountRepository;
 import ru.example.repository.ClientRepository;
 import ru.example.service.AccountService;
 import ru.example.service.ActionService;
+import ru.example.util.ModelMapperUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -24,15 +27,20 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final ClientRepository clientRepository;
     private final ActionService actionService;
+    private final ModelMapperUtil modelMapperUtil;
 
     @Override
-    public List<Account> findAllByClientId(int clientId) {
-        return accountRepository.findAccountsByClient_Id(clientId);
+    public List<AccountsDTO> findAllByClientId(int clientId) {
+        return accountRepository.findAccountsByClient_Id(clientId)
+                .stream()
+                .map(account -> modelMapperUtil.map(account, AccountsDTO.class))
+                .toList();
     }
 
     @Override
-    public Optional<Account> findAccountById(int accountId) {
-        return accountRepository.findById(accountId);
+    public Optional<AccountDTO> findAccountById(int accountId) {
+        return accountRepository.findById(accountId)
+                .map(account -> modelMapperUtil.map(account, AccountDTO.class));
     }
 
     @Transactional
@@ -56,9 +64,9 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void topUpAccountBalance(int accountId, BigDecimal amount) {
-        var account = findAccountById(accountId).get();
+        var account = accountRepository.findById(accountId).get();
 
-//        if (account.getStatus().name().equals("CLOSED")) {
+//        if (account.getStatus() == AccountStatus.CLOSED) {
 //            //todo Ошибка: счёт закрыт
 //        }
 
@@ -80,8 +88,8 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     @Override
     public void withdrawMoneyFromAccountBalance(int accountId, BigDecimal amount) {
-        var account = findAccountById(accountId).get();
-//        if (account.getStatus().name().equals("CLOSED")) {
+        var account = accountRepository.findById(accountId).get();
+//        if (account.getStatus() == AccountStatus.CLOSED) {
 //            //todo Ошибка: счёт закрыт
 //        }
 
@@ -100,22 +108,24 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public void closeAccount(int accountId) {
-        var account = findAccountById(accountId).get();
-//        if (account.getStatus().name().equals("CLOSED")) {
-//            //todo Ошибка: счёт уже закрыт
-//        }
+    public boolean closeAccount(int accountId) {
+        return accountRepository.findById(accountId)
+                .map(account -> {
+//                    if (account.getStatus() == AccountStatus.CLOSED) {
+//                        //todo Ошибка: счёт уже закрыт
+//                    }
+//                    if (account.getBalance() != 0) {
+//                        //todo Ошибка: сначала снимите все деньги со счёта
+//                    }
+                    var action = actionService.createNewAction(OperationType.ACCOUNT_REMOVAL,
+                            null, account.getBalance());
+                    account.addAction(action);
 
-//      if (account.getBalance() != 0) {
-//          //todo Ошибка: сначала снимите все деньги со счёта
-//      }
-
-        var action = actionService.createNewAction(OperationType.ACCOUNT_REMOVAL,
-                null, account.getBalance());
-        account.addAction(action);
-
-        account.setStatus(AccountStatus.CLOSED);
-        accountRepository.save(account);
+                    account.setStatus(AccountStatus.CLOSED);
+                    accountRepository.save(account);
+                    return true;
+                })
+                .orElse(false);
     }
 
     /** Генерация номера банковского счёта при его создании */

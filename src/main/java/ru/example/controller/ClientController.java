@@ -6,9 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.example.dto.ClientDTO;
+import ru.example.dto.client.ClientDTO;
 import ru.example.service.ClientService;
-import ru.example.util.ModelMapperUtil;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,7 +15,6 @@ import ru.example.util.ModelMapperUtil;
 public class ClientController {
 
     private final ClientService clientService;
-    private final ModelMapperUtil modelMapperUtil;
 
     @GetMapping
     public String findAllClients(Model model) {

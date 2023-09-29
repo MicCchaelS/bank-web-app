@@ -3,8 +3,10 @@ package ru.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.example.dto.ClientDTO;
+import ru.example.dto.client.ClientDTO;
+import ru.example.dto.client.ClientsDTO;
 import ru.example.model.Client;
+import ru.example.model.enums.AccountStatus;
 import ru.example.repository.ClientRepository;
 import ru.example.service.ClientService;
 import ru.example.util.ModelMapperUtil;
@@ -21,10 +23,10 @@ public class ClientServiceImpl implements ClientService {
     private final ModelMapperUtil modelMapperUtil;
 
     @Override
-    public List<ClientDTO> findAllClients() {
+    public List<ClientsDTO> findAllClients() {
         return clientRepository.findAll()
                 .stream()
-                .map(client -> modelMapperUtil.map(client, ClientDTO.class))
+                .map(client -> modelMapperUtil.map(client, ClientsDTO.class))
                 .toList();
     }
 
@@ -53,11 +55,23 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public boolean deleteClient(int id) {
-        return clientRepository.findById(id)
-                .map(client -> {
-                    clientRepository.delete(client);
-                    return true;
-                })
-                .orElse(false);
+        var client = clientRepository.findById(id);
+
+        if (client.isPresent()) {
+            var anyAccount = client.get()
+                    .getAccounts()
+                    .stream()
+                    .filter(account -> account.getStatus() == AccountStatus.OPEN)
+                    .findFirst();
+
+//            if (anyAccount.isPresent()) {
+//                //todo ошибка: сперва требуется закрыть все открытые банковские счета клиента
+//            } else {
+            clientRepository.deleteById(id);
+            return true;
+//            }
+        } else {
+            return false;
+        }
     }
 }

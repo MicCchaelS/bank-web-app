@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.example.model.Account;
+import ru.example.dto.account.AccountDTO;
 import ru.example.service.AccountService;
 
 @Controller
@@ -26,10 +26,13 @@ public class AccountController {
     @GetMapping("/{accountId}")
     public String findAccountById(Model model, @PathVariable("accountId") int accountId,
                                   @PathVariable("clientId") int clientId) {
-        model.addAttribute("account", accountService.findAccountById(accountId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
-        model.addAttribute("clientId", clientId);
-        return "account/account";
+        return accountService.findAccountById(accountId)
+                .map(accountDTO -> {
+                    model.addAttribute("account", accountDTO);
+                    model.addAttribute("clientId", clientId);
+                    return "account/account";
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
@@ -38,20 +41,22 @@ public class AccountController {
     }
 
     @PatchMapping("/{accountId}/top-up")
-    public String topUpBalance(@PathVariable("accountId") int accountId, Account account) {
-        accountService.topUpAccountBalance(accountId, account.getAmount());
+    public String topUpBalance(@PathVariable("accountId") int accountId, AccountDTO accountDTO) {
+        accountService.topUpAccountBalance(accountId, accountDTO.getAmount());
         return "redirect:/api/clients/{clientId}/accounts/{accountId}";
     }
 
     @PatchMapping("/{accountId}/withdraw")
-    public String withdrawMoney(@PathVariable("accountId") int accountId, Account account) {
-        accountService.withdrawMoneyFromAccountBalance(accountId, account.getAmount());
+    public String withdrawMoney(@PathVariable("accountId") int accountId, AccountDTO accountDTO) {
+        accountService.withdrawMoneyFromAccountBalance(accountId, accountDTO.getAmount());
         return "redirect:/api/clients/{clientId}/accounts/{accountId}";
     }
 
     @PatchMapping("/{accountId}/close")
     public String closeAccount(@PathVariable("accountId") int accountId) {
-        accountService.closeAccount(accountId);
+        if (!accountService.closeAccount(accountId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         return "redirect:/api/clients/{clientId}/accounts";
     }
 }

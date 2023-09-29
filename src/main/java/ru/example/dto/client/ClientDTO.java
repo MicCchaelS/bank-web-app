@@ -1,7 +1,8 @@
-package ru.example.dto;
+package ru.example.dto.client;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -17,6 +18,7 @@ public class ClientDTO {
 
     private String middleName;
 
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate birthDate;
 
     private String snils;
