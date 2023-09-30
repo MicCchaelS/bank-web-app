@@ -6,4 +6,7 @@ import ru.example.model.Client;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Integer> {
+
+    boolean existsClientBySnils(String snils);
+    boolean existsClientBySnilsAndIdNot(String snils, int id);
 }
