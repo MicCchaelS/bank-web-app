@@ -37,7 +37,7 @@ public class ClientController {
     }
 
     @GetMapping("/new")
-    public String newClient(@ModelAttribute("client") ClientDTO clientDTO) {
+    public String showNewClientForm(@ModelAttribute("client") ClientDTO clientDTO) {
         return "client/newClient";
     }
 
@@ -51,7 +51,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editClient(@PathVariable("id") int id, Model model) {
+    public String showEditClientForm(@PathVariable("id") int id, Model model) {
         return clientService.findClientById(id)
                 .map(clientDTO -> {
                     model.addAttribute("client", clientDTO);

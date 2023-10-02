@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Снятие денег со счёта</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+</head>
+<body>
+
+<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
+<a th:href="@{/api/clients/{clientId}(clientId=${clientId})}"
+   class="btn btn-secondary btn-sm">Текущий клиент</a>
+<a th:href="@{/api/clients/{clientId}/accounts(clientId=${clientId})}"
+   class="btn btn-outline-primary btn-sm">Банковские счета клиента</a>
+<a th:href="@{/api/clients/{clientId}/accounts/{accountId}(clientId=${clientId}, accountId=${account.id})}"
+   class="btn btn-outline-primary btn-sm">Текущий банковский счёт</a>
+<hr>
+
+<div align="center">
+    <h3>Снятие денег со счёта</h3>
+
+    <hr>
+    <form th:method="PATCH"
+          th:action="@{/api/clients/{clientId}/accounts/{accountId}/withdraw
+                                    (clientId=${clientId}, accountId=${account.id})}"
+          th:object="${account}">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{balance}">
+
+        <p th:text="'Баланс: ' + *{balance} + ' ₽'"/>
+        <label for="withdrawalAmount">Введите сумму, которую требуется снять (Мин. 0.01 ₽): </label>
+        <input type="text" th:field="*{withdrawalAmount}" id="withdrawalAmount"/>
+        <br>
+        <div style="color:red"
+             th:if="${#fields.hasErrors('withdrawalAmount')}" th:errors="*{withdrawalAmount}">
+        </div>
+        <br>
+        <input type="submit" value="Снять"/>
+    </form>
+
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

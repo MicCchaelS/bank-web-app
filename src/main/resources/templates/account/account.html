@@ -8,48 +8,44 @@
 </head>
 <body>
 
+<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
+<a th:href="@{/api/clients/{clientId}(clientId=${clientId})}"
+   class="btn btn-secondary btn-sm">Текущий клиент</a>
+<a th:href="@{/api/clients/{clientId}/accounts(clientId=${clientId})}"
+   class="btn btn-outline-primary btn-sm">Банковские счета клиента</a>
+<hr>
+
 <div align="center">
     <h2>Информация о банковском счёте</h2>
 
     <hr>
     <p th:text="'Номер счёта: ' + ${account.accountNumber}"/>
-    <p th:text="'Баланс: ' + ${account.balance}"/>
-    <p th:text="'Статус: ' + ${account.status}"/>
+    <p th:text="'Баланс: ' + ${account.balance} + ' ₽'"/>
+    <p th:text="'Статус: ' + ${account.status.statusName}"/>
 
     <div th:if="${!account.getStatus().name().equals('CLOSED')}">
 
         <hr>
-        <form th:method="PATCH"
+        <form th:method="GET"
               th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up
-                                    (clientId=${clientId}, accountId=${account.id})}"
-              th:object="${account}">
-            <h4>Пополнение баланса счёта</h4>
-            <label for="topUpAmount">Введите сумму, которую требуется зачислить: </label>
-            <input type="text" th:field="*{amount}" id="topUpAmount"/>
+                                    (clientId=${clientId}, accountId=${account.id})}">
+            <h5>Пополнение баланса счёта</h5>
             <input type="submit" value="Пополнить"/>
-            <div style="color:red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
-            <br>
-
         </form>
 
         <hr>
-        <form th:method="PATCH"
+        <form th:method="GET"
               th:action="@{/api/clients/{clientId}/accounts/{accountId}/withdraw
-                                    (clientId=${clientId}, accountId=${account.id})}"
-              th:object="${account}">
-            <h4>Снятие денег со счёта</h4>
-            <label for="withdrawAmount">Введите сумму, которую требуется снять: </label>
-            <input type="text" th:field="*{amount}" id="withdrawAmount"/>
+                                    (clientId=${clientId}, accountId=${account.id})}">
+            <h5>Снятие денег со счёта</h5>
             <input type="submit" value="Снять"/>
-            <div style="color:red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
-            <br>
         </form>
 
         <hr>
         <form th:method="PATCH"
               th:action="@{/api/clients/{clientId}/accounts/{accountId}/close
                                     (clientId=${clientId}, accountId=${account.id})}">
-            <h4>Закрытие текущего счёта</h4>
+            <h5>Закрытие текущего счёта</h5>
             <input type="submit" value="Закрыть"/>
         </form>
 

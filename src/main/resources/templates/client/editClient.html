@@ -8,6 +8,10 @@
 </head>
 <body>
 
+<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
+<a th:href="@{/api/clients/{clientId}(clientId=${client.id})}" class="btn btn-secondary btn-sm">Текущий клиент</a>
+<hr>
+
 <div align="center">
     <h3>Изменение данных клиента</h3>
 
@@ -16,25 +20,25 @@
           th:action="@{/api/clients/{clientId}(clientId=${client.id})}"
           th:object="${client}">
         <label for="lastName">Введите фамилию: </label>
-        <input type="text" th:field="*{lastName}" id="lastName"/>
+        <input type="text" th:field="*{lastName}" id="lastName"/><br>
         <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
-        <br><br>
+        <br>
         <label for="firstName">Введите имя: </label>
-        <input type="text" th:field="*{firstName}" id="firstName"/>
+        <input type="text" th:field="*{firstName}" id="firstName"/><br>
         <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
-        <br><br>
+        <br>
         <label for="middleName">Введите отчество: </label>
-        <input type="text" th:field="*{middleName}" id="middleName"/>
+        <input type="text" th:field="*{middleName}" id="middleName"/><br>
         <div style="color:red" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></div>
-        <br><br>
+        <br>
         <label for="birthDate">Введите дату рождения: </label>
-        <input type="text" th:field="*{birthDate}" id="birthDate"/>
+        <input type="text" th:field="*{birthDate}" id="birthDate"/><br>
         <div style="color:red" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
-        <br><br>
+        <br>
         <label for="snils">Введите СНИЛС: </label>
-        <input type="text" th:field="*{snils}" id="snils"/>
+        <input type="text" th:field="*{snils}" id="snils"/><br>
         <div style="color:red" th:if="${#fields.hasErrors('snils')}" th:errors="*{snils}"></div>
-        <br><br>
+        <br>
         <input type="submit" value="Сохранить изменения"/>
     </form>
 </div>

@@ -3,7 +3,6 @@ package ru.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.example.dto.account.AccountDTO;
 import ru.example.dto.account.AccountsDTO;
 import ru.example.model.Account;
 import ru.example.model.enums.AccountStatus;
@@ -38,9 +37,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<AccountDTO> findAccountById(int accountId) {
+    public <T> Optional<T> findAccountById(int accountId, Class<T> dtoClass) {
         return accountRepository.findById(accountId)
-                .map(account -> modelMapperUtil.map(account, AccountDTO.class));
+                .map(account -> modelMapperUtil.map(account, dtoClass));
     }
 
     @Transactional
@@ -49,13 +48,13 @@ public class AccountServiceImpl implements AccountService {
         var account = new Account();
         account.setAccountNumber(generateAccountNumber());
         account.setStatus(AccountStatus.OPEN);
-        account.setBalance(new BigDecimal(0));
+        account.setBalance(BigDecimal.ZERO);
 
         var client = clientRepository.findById(clientId).get();
         client.addAccount(account);
 
         var action = actionService.createNewAction(OperationType.ACCOUNT_CREATION,
-                null, new BigDecimal(0));
+                null, BigDecimal.ZERO);
         account.addAction(action);
 
         return accountRepository.save(account).getId();
@@ -70,7 +69,7 @@ public class AccountServiceImpl implements AccountService {
 //            //todo Ошибка: счёт закрыт
 //        }
 
-//        final BigDecimal MAX_BALANCE = new BigDecimal(1_000_000_000);
+//        final BigDecimal MAX_BALANCE = BigDecimal.valueOf(1_000_000_000);
         BigDecimal newBalance = account.getBalance().add(amount);
 //        if (newBalance.compareTo(MAX_BALANCE) > 0) {
 //            //todo Ошибка: максимальная сумма, которая может храниться на балансе счёта - 1 000 000 000 рублей
@@ -87,7 +86,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public void withdrawMoneyFromAccountBalance(int accountId, BigDecimal amount) {
+    public void withdrawMoneyFromAccount(int accountId, BigDecimal amount) {
         var account = accountRepository.findById(accountId).get();
 //        if (account.getStatus() == AccountStatus.CLOSED) {
 //            //todo Ошибка: счёт закрыт
@@ -133,18 +132,20 @@ public class AccountServiceImpl implements AccountService {
         // Код валюты (рубль) для нумерации всех банковских счетов в этой валюте
         final String RUB_CURRENCY_CODE = "810";
 
-        var sb = new StringBuilder();
-        for (int i = 0; i < 20; i++) {
-            if (i == 5) {
-                sb.append(RUB_CURRENCY_CODE);
-                i = 8;
+        StringBuilder accountNumber;
+
+        do {
+            accountNumber = new StringBuilder();
+            for (int i = 0; i < 20; i++) {
+                if (i == 5) {
+                    accountNumber.append(RUB_CURRENCY_CODE);
+                    i = 8;
+                }
+
+                accountNumber.append(ThreadLocalRandom.current().nextInt(0, 10));
             }
+        } while (accountRepository.existsAccountByAccountNumber(accountNumber.toString()));
 
-            sb.append(ThreadLocalRandom.current().nextInt(0, 10));
-        }
-
-        //todo Сделать проверку на уникальность номера банковского счёта
-
-        return sb.toString();
+        return accountNumber.toString();
     }
 }

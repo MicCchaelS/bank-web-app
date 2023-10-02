@@ -8,6 +8,11 @@
 </head>
 <body>
 
+<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
+<a th:href="@{/api/clients/{clientId}(clientId=${clientId})}"
+   class="btn btn-secondary btn-sm">Текущий клиент</a>
+<hr>
+
 <div align="center">
     <h2>Банковские счета клиента</h2>
     <hr>
@@ -36,7 +41,7 @@
                     <tr>
                         <th>№</th>
                         <th>Номер счёта</th>
-                        <th>Баланс</th>
+                        <th>Баланс (₽)</th>
                         <th>Статус</th>
                         <th>Полная информация</th>
                     </tr>
@@ -46,8 +51,8 @@
                     <tr th:each="account : ${accounts}">
                         <td th:text="${accountStat.index+1}">№</td>
                         <td th:text="${account.accountNumber}">Номер счёта</td>
-                        <td th:text="${account.balance}">Баланс</td>
-                        <td th:text="${account.status}">Статус</td>
+                        <td th:text="${account.balance} + ' ₽'">Баланс</td>
+                        <td th:text="${account.status.statusName}">Статус</td>
                         <td>
                             <form th:method="GET"
                                   th:action="@{/api/clients/{clientId}/accounts/{accountId}

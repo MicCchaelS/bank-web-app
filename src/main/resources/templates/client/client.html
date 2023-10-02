@@ -8,10 +8,13 @@
 </head>
 <body>
 
+<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
+<hr>
+
 <div align="center">
     <h2>Информация о клиенте</h2>
-
     <hr>
+
     <p th:text="'Фамилия: ' + ${client.lastName}"/>
     <p th:text="'Имя: ' + ${client.firstName}"/>
     <p th:text="'Отчество: ' + ${client.middleName}"/>
@@ -21,19 +24,22 @@
     <hr>
     <form th:method="GET"
           th:action="@{/api/clients/{clientId}/accounts(clientId=${client.id})}">
-        <input type="submit" value="Банковские счета клиента"/>
+        <h5>Банковские счета</h5>
+        <input type="submit" value="Открыть"/>
     </form>
 
     <hr>
     <form th:method="GET"
           th:action="@{/api/clients/{clientId}/edit(clientId=${client.id})}">
-        <input type="submit" value="Изменить данные клиента"/>
+        <h5>Изменение данных</h5>
+        <input type="submit" value="Изменить"/>
     </form>
 
     <hr>
     <form th:method="DELETE"
           th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
-        <input type="submit" value="Удалить клиента"/>
+        <h5>Удаление клиента</h5>
+        <input type="submit" value="Удалить"/>
     </form>
 </div>
 
