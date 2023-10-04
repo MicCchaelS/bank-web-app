@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.example.dto.client.ClientDTO;
 import ru.example.dto.client.ClientsDTO;
+import ru.example.exception.DeleteClientException;
+import ru.example.exception.ResourceNotFoundException;
 import ru.example.model.Client;
 import ru.example.model.enums.AccountStatus;
 import ru.example.repository.ClientRepository;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    
     private final ModelMapperUtil modelMapperUtil;
 
     @Override
@@ -31,9 +34,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<ClientDTO> findClientById(int id) {
+    public ClientDTO findClientById(int id) {
         return clientRepository.findById(id)
-                .map(client -> modelMapperUtil.map(client, ClientDTO.class));
+                .map(client -> modelMapperUtil.map(client, ClientDTO.class))
+                .orElseThrow(() -> new ResourceNotFoundException("Клиент не найден"));
     }
 
     @Transactional
@@ -49,29 +53,30 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public void updateClient(ClientDTO clientDTO) {
-        clientRepository.save(modelMapperUtil.map(clientDTO, Client.class));
+        Optional.of(clientDTO)
+                .map(dto -> modelMapperUtil.map(dto, Client.class))
+                .map(clientRepository::save)
+                .orElseThrow();
     }
 
     @Transactional
     @Override
-    public boolean deleteClient(int id) {
-        var client = clientRepository.findById(id);
+    public void deleteClient(int id) {
+        clientRepository.findById(id)
+                .ifPresentOrElse(
+                        client -> {
+                            if (client.getAccounts()
+                                    .stream()
+                                    .anyMatch(account -> account.getStatus() == AccountStatus.OPEN)) {
+                                throw new DeleteClientException("Ошибка удаления клиента. " +
+                                        "Сначала требуется закрыть все открытые банковские счета клиента", id);
+                            }
 
-        if (client.isPresent()) {
-            var anyAccount = client.get()
-                    .getAccounts()
-                    .stream()
-                    .filter(account -> account.getStatus() == AccountStatus.OPEN)
-                    .findFirst();
-
-//            if (anyAccount.isPresent()) {
-//                //todo ошибка: сперва требуется закрыть все открытые банковские счета клиента
-//            } else {
-            clientRepository.deleteById(id);
-            return true;
-//            }
-        } else {
-            return false;
-        }
+                            clientRepository.delete(client);
+                        },
+                        () -> {
+                            throw new ResourceNotFoundException("Клиент не найден");
+                        }
+                );
     }
 }

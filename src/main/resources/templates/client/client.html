@@ -39,6 +39,9 @@
     <form th:method="DELETE"
           th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
         <h5>Удаление клиента</h5>
+        <div style="color: red;" th:if="${deleteClientError}">
+            <p th:text="${deleteClientError}"></p>
+        </div>
         <input type="submit" value="Удалить"/>
     </form>
 </div>

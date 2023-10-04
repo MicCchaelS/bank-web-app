@@ -2,12 +2,10 @@ package ru.example.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ru.example.dto.client.ClientDTO;
 import ru.example.service.ClientService;
 import ru.example.validation.validator.ClientDTOValidator;
@@ -18,6 +16,7 @@ import ru.example.validation.validator.ClientDTOValidator;
 public class ClientController {
 
     private final ClientService clientService;
+
     private final ClientDTOValidator clientDTOValidator;
 
     @GetMapping
@@ -28,12 +27,8 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public String findClientById(@PathVariable("id") int id, Model model) {
-        return clientService.findClientById(id)
-                .map(clientDTO -> {
-                    model.addAttribute("client", clientDTO);
-                    return "client/client";
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("client", clientService.findClientById(id));
+        return "client/client";
     }
 
     @GetMapping("/new")
@@ -42,9 +37,10 @@ public class ClientController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute("client") @Valid ClientDTO clientDTO,
+    public String createClient(@ModelAttribute("client") @Valid ClientDTO clientDTO,
                          BindingResult bindingResult) {
         clientDTOValidator.validate(clientDTO, bindingResult);
+
         return bindingResult.hasErrors()
                 ? "client/newClient"
                 : "redirect:/api/clients/" + clientService.saveClient(clientDTO).getId();
@@ -52,12 +48,8 @@ public class ClientController {
 
     @GetMapping("/{id}/edit")
     public String showEditClientForm(@PathVariable("id") int id, Model model) {
-        return clientService.findClientById(id)
-                .map(clientDTO -> {
-                    model.addAttribute("client", clientDTO);
-                    return "client/editClient";
-                })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("client", clientService.findClientById(id));
+        return "client/editClient";
     }
 
     @PatchMapping("/{id}")
@@ -75,9 +67,7 @@ public class ClientController {
 
     @DeleteMapping("/{id}")
     public String deleteClient(@PathVariable("id") int id) {
-        if (!clientService.deleteClient(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        clientService.deleteClient(id);
         return "redirect:/api/clients";
     }
 }

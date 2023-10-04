@@ -20,12 +20,12 @@ public class ClientDTOValidator implements Validator {
     }
 
     @Override
-    public void validate(@NonNull Object target,@NonNull Errors errors) {
-        var clientDTO = (ClientDTO) target;
-
-        if (clientDTO.getSnils().isBlank()) {
+    public void validate(@NonNull Object target, @NonNull Errors errors) {
+        if (errors.hasErrors()) {
             return;
         }
+
+        var clientDTO = (ClientDTO) target;
 
         // Если при создании клиента введённый СНИЛС уже используется
         if (clientDTO.getId() == 0 && clientRepository.existsClientBySnils(clientDTO.getSnils())) {

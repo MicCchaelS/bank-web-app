@@ -46,6 +46,9 @@
               th:action="@{/api/clients/{clientId}/accounts/{accountId}/close
                                     (clientId=${clientId}, accountId=${account.id})}">
             <h5>Закрытие текущего счёта</h5>
+            <div style="color: red" th:if="${closeAccountError}">
+                <p th:text="${closeAccountError}"></p>
+            </div>
             <input type="submit" value="Закрыть"/>
         </form>
 
