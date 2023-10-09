@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ModelMapperUtil {
+
     private final ModelMapper modelMapper;
 
     public <D, S> D map(S source, Class<D> destinationType) {

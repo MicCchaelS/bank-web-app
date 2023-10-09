@@ -4,64 +4,53 @@
     <meta charset="UTF-8">
     <title>Клиенты банка</title>
 
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
 </head>
-<body>
+<body style="text-align: center" class="bg-success p-2 text-dark bg-opacity-25">
 
-<div align="center">
-    <h2>Клиенты банка</h2>
-    <hr>
-</div>
+<header>
+    <h2 class="mb-4">Клиенты банка</h2>
+</header>
 
-<div align="center">
-    <div th:if="${clients.isEmpty()}">
+<div class="container mt-4">
+    <div th:if="${clients.isEmpty()}" class="fs-5 mb-3">
         <p>Список клиентов пуст</p>
     </div>
-</div>
 
-<div align="center">
-    <form th:method="GET" th:action="@{/api/clients/new}">
-        <input type="submit" value="Добавить клиента"/>
+    <form th:method="GET" th:action="@{/api/clients/new}" class="mb-3">
+        <input type="submit" class="btn btn-success" value="Добавить клиента"/>
     </form>
-    <br>
-</div>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div th:if="${!clients.isEmpty()}">
-                <table id="example" class="table table-bordered" style="width: 100%">
-                    <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Фамилия</th>
-                        <th>Имя</th>
-                        <th>Отчество</th>
-                        <th>Полная информация</th>
-                    </tr>
-                    </thead>
+    <div th:if="${!clients.isEmpty()}">
+        <table class="table table-bordered table-striped table-hover" style="text-align: left">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Полная информация</th>
+            </tr>
+            </thead>
 
-                    <tbody>
-                    <tr th:each="client : ${clients}">
-                        <td th:text="${clientStat.index+1}">№</td>
-                        <td th:text="${client.lastName}">Фамилия</td>
-                        <td th:text="${client.firstName}">Имя</td>
-                        <td th:text="${client.middleName}">Отчество</td>
-                        <td>
-                            <form th:method="GET"
-                                  th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
-                                <input type="submit" value="Подробнее"/>
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            <tbody>
+            <tr th:each="client : ${clients}">
+                <td th:text="${clientStat.index+1}">#</td>
+                <td th:text="${client.lastName}">Фамилия</td>
+                <td th:text="${client.firstName}">Имя</td>
+                <td th:text="${client.middleName}">Отчество</td>
+                <td>
+                    <form th:method="GET" th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
+                        <input type="submit" value="Подробнее"/>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

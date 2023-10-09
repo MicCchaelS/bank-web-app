@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ClientService {
 
-    public List<ClientsDTO> findAllClients();
-    public ClientDTO findClientById(int id);
-    public ClientDTO saveClient(ClientDTO clientDTO);
-    public void updateClient(ClientDTO clientDTO);
-    public void deleteClient(int id);
+    List<ClientsDTO> findAllClients();
+    ClientDTO findClientById(int id);
+    ClientDTO saveClient(ClientDTO clientDTO);
+    void updateClient(ClientDTO clientDTO);
+    void deleteClient(int id);
 }

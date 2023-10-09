@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     public String handleException(ResourceNotFoundException e, Model model) {
         log.error(e.getMessage(), e);
         model.addAttribute("error", e.getMessage());
-        return "error/resourceNotFound";
+        return "error/error";
     }
 
     @ExceptionHandler(DeleteClientException.class)

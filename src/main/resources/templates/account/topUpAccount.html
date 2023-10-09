@@ -4,47 +4,45 @@
     <meta charset="UTF-8">
     <title>Пополнение счёта</title>
 
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
 </head>
-<body>
+<body class="bg-success p-2 text-dark bg-opacity-25">
 
-<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
-<a th:href="@{/api/clients/{clientId}(clientId=${clientId})}"
-   class="btn btn-secondary btn-sm">Текущий клиент</a>
-<a th:href="@{/api/clients/{clientId}/accounts(clientId=${clientId})}"
-   class="btn btn-outline-primary btn-sm">Банковские счета клиента</a>
-<a th:href="@{/api/clients/{clientId}/accounts/{accountId}(clientId=${clientId}, accountId=${account.id})}"
-   class="btn btn-outline-primary btn-sm">Текущий банковский счёт</a>
-<hr>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
+    <div class="container" style="display: inline-block">
+        <a class="btn btn-primary" th:href="@{/api/clients}">Список клиентов</a>
+        <a class="btn btn-secondary" th:href="@{/api/clients/{clientId}(clientId=${clientId})}">Текущий клиент</a>
+        <a class="btn btn-outline-primary" th:href="@{/api/clients/{clientId}/accounts
+                                                                   (clientId=${clientId})}">Банковские счета клиента
+        </a>
+        <a class="btn btn-outline-secondary"
+           th:href="@{/api/clients/{clientId}/accounts/{accountId}
+                                   (clientId=${clientId}, accountId=${account.id})}">Текущий банковский счёт
+        </a>
+    </div>
+</nav>
 
-<div align="center">
-    <h3>Пополнение счёта</h3>
+<div class="container mt-4" style="text-align: center">
+    <h2 class="mb-4">Пополнение счёта</h2>
 
-    <hr>
     <form th:method="PATCH"
           th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up
-                                    (clientId=${clientId}, accountId=${account.id})}"
+                                (clientId=${clientId}, accountId=${account.id})}"
           th:object="${account}">
-        <input type="hidden" th:field="*{id}">
-        <input type="hidden" th:field="*{accountNumber}">
-        <input type="hidden" th:field="*{balance}">
-        <input type="hidden" th:field="*{status}">
-        <input type="hidden" th:field="*{operationType}">
+        <input type="hidden" th:field="*{id}"><input type="hidden" th:field="*{accountNumber}"><input type="hidden" th:field="*{balance}"><input type="hidden" th:field="*{status}"><input type="hidden" th:field="*{operationType}">
 
-        <p th:text="'Баланс: ' + *{balance} + ' ₽'"/>
-        <label for="amount">Введите сумму, которую требуется зачислить (Мин. 1 ₽): </label>
-        <input type="text" th:field="*{amount}" id="amount"/>
-        <br>
-        <div style="color:red"
-             th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">
+        <div class="mb-3">
+            <p th:text="'Баланс: ' + *{balance} + ' ₽'"/>
+            <label for="amount">Введите сумму, которую требуется зачислить (Мин. 1 ₽): </label>
+            <input type="text" th:field="*{amount}" id="amount" placeholder="1000"/>
+            <div style="color:red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
         </div>
-        <br>
-        <input type="submit" value="Пополнить"/>
-    </form>
 
+        <input type="submit" class="btn btn-success" value="Пополнить"/>
+    </form>
 </div>
 
-<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

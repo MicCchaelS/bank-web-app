@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface AccountService {
 
-    public List<AccountsDTO> findAllByClientId(int clientId);
-    public AccountDTO findAccountById(int accountId);
-    public AccountDTO saveAccount(int clientId);
-    public void topUpAccountBalance(int accountId, BigDecimal amount);
-    public void withdrawMoneyFromAccount(int accountId, BigDecimal amount);
-    public void closeAccount(int accountId);
+    List<AccountsDTO> findAllByClientId(int clientId);
+    AccountDTO findAccountById(int accountId);
+    AccountDTO saveAccount(int clientId);
+    void topUpAccountBalance(int accountId, BigDecimal amount);
+    void withdrawMoneyFromAccount(int accountId, BigDecimal amount);
+    void closeAccount(int accountId);
 }

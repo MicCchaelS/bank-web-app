@@ -7,5 +7,5 @@ import java.math.BigDecimal;
 
 public interface ActionService {
 
-    public Action createNewAction(OperationType operationType, BigDecimal amount, BigDecimal reminder);
+    Action createNewAction(OperationType operationType, BigDecimal amount, BigDecimal reminder);
 }

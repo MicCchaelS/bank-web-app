@@ -4,58 +4,79 @@
     <meta charset="UTF-8">
     <title>Банковский счёт</title>
 
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
 </head>
-<body>
+<body class="bg-success p-2 text-dark bg-opacity-25">
 
-<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
-<a th:href="@{/api/clients/{clientId}(clientId=${clientId})}"
-   class="btn btn-secondary btn-sm">Текущий клиент</a>
-<a th:href="@{/api/clients/{clientId}/accounts(clientId=${clientId})}"
-   class="btn btn-outline-primary btn-sm">Банковские счета клиента</a>
-<hr>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
+    <div class="container" style="display: inline-block">
+        <a class="btn btn-primary" th:href="@{/api/clients}">Список клиентов</a>
+        <a class="btn btn-secondary" th:href="@{/api/clients/{clientId}(clientId=${clientId})}">Текущий клиент</a>
+        <a class="btn btn-outline-primary" th:href="@{/api/clients/{clientId}/accounts
+                                                                   (clientId=${clientId})}">Банковские счета клиента</a>
+    </div>
+</nav>
 
-<div align="center">
-    <h2>Информация о банковском счёте</h2>
+<div class="container mt-4" style="text-align: center">
+    <h2 class="mb-4">Информация о банковском счёте</h2>
 
-    <hr>
-    <p th:text="'Номер счёта: ' + ${account.accountNumber}"/>
-    <p th:text="'Баланс: ' + ${account.balance} + ' ₽'"/>
-    <p th:text="'Статус: ' + ${account.status.statusName}"/>
+    <div class="mb-3 fs-5">
+        <p th:text="'Номер счёта: ' + ${account.accountNumber}"/>
+        <p th:text="'Баланс: ' + ${account.balance} + ' ₽'"/>
+        <p th:text="'Статус: ' + ${account.status.statusName}"/>
+    </div>
 
-    <div th:if="${!account.getStatus().name().equals('CLOSED')}">
-
+    <div th:if="${!account.status.name().equals('CLOSED')}">
         <hr>
+
         <form th:method="GET"
               th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up
-                                    (clientId=${clientId}, accountId=${account.id})}">
-            <h5>Пополнение баланса счёта</h5>
-            <input type="submit" value="Пополнить"/>
+                                        (clientId=${clientId}, accountId=${account.id})}"
+              style="display: inline-block">
+            <input type="submit" class="btn btn-success" value="Пополнить счёт"/>
         </form>
 
-        <hr>
         <form th:method="GET"
               th:action="@{/api/clients/{clientId}/accounts/{accountId}/withdraw
-                                    (clientId=${clientId}, accountId=${account.id})}">
-            <h5>Снятие денег со счёта</h5>
-            <input type="submit" value="Снять"/>
+                                        (clientId=${clientId}, accountId=${account.id})}"
+              style="display: inline-block">
+            <input type="submit" class="btn btn-info" value="Снять деньги со счёта"/>
         </form>
 
-        <hr>
-        <form th:method="PATCH"
-              th:action="@{/api/clients/{clientId}/accounts/{accountId}/close
-                                    (clientId=${clientId}, accountId=${account.id})}">
-            <h5>Закрытие текущего счёта</h5>
-            <div style="color: red" th:if="${closeAccountError}">
-                <p th:text="${closeAccountError}"></p>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                style="display: inline-block">Закрыть счёт
+        </button>
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Предупреждение</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Отмена"></button>
+                    </div>
+                    <form th:method="PATCH"
+                          th:action="@{/api/clients/{clientId}/accounts/{accountId}/close
+                                                    (clientId=${clientId}, accountId=${account.id})}">
+                        <div class="modal-body">
+                            <p>Внимание! Это действие приведёт к закрытию счёта без возможности вновь его открыть</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                            <input type="submit" class="btn btn-danger" value="Закрыть счёт"/>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <input type="submit" value="Закрыть"/>
-        </form>
+        </div>
 
+        <div class="alert alert-danger" role="alert" th:if="${closeAccountError}">
+            <p th:text="${closeAccountError}"></p>
+        </div>
     </div>
 </div>
 
-<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

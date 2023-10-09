@@ -4,49 +4,72 @@
     <meta charset="UTF-8">
     <title>Клиент</title>
 
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
 </head>
-<body>
+<body class="bg-success p-2 text-dark bg-opacity-25">
 
-<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
-<hr>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
+    <div class="container">
+        <a class="btn btn-primary" th:href="@{/api/clients}">Список клиентов</a>
+    </div>
+</nav>
 
-<div align="center">
-    <h2>Информация о клиенте</h2>
+<div class="container mt-4" style="text-align: center">
+    <h2 class="mb-4">Информация о клиенте</h2>
+
+    <div class="mb-3 fs-5">
+        <p th:text="'Фамилия: ' + ${client.lastName}"/>
+        <p th:text="'Имя: ' + ${client.firstName}"/>
+        <p th:text="'Отчество: ' + ${client.middleName}"/>
+        <p th:text="'Дата рождения: ' + ${#temporals.format(client.birthDate, 'dd.MM.yyyy')}"/>
+        <p th:text="'СНИЛС: ' + ${client.snils}"/>
+    </div>
     <hr>
 
-    <p th:text="'Фамилия: ' + ${client.lastName}"/>
-    <p th:text="'Имя: ' + ${client.firstName}"/>
-    <p th:text="'Отчество: ' + ${client.middleName}"/>
-    <p th:text="'Дата рождения: ' + ${#temporals.format(client.birthDate, 'dd.MM.yyyy')}"/>
-    <p th:text="'СНИЛС: ' + ${client.snils}"/>
-
-    <hr>
     <form th:method="GET"
-          th:action="@{/api/clients/{clientId}/accounts(clientId=${client.id})}">
-        <h5>Банковские счета</h5>
-        <input type="submit" value="Открыть"/>
+          th:action="@{/api/clients/{clientId}/accounts(clientId=${client.id})}"
+          style="display: inline-block">
+        <input type="submit" class="btn btn-success" value="Банковские счета"/>
     </form>
 
-    <hr>
     <form th:method="GET"
-          th:action="@{/api/clients/{clientId}/edit(clientId=${client.id})}">
-        <h5>Изменение данных</h5>
-        <input type="submit" value="Изменить"/>
+          th:action="@{/api/clients/{clientId}/edit(clientId=${client.id})}"
+          style="display: inline-block">
+        <input type="submit" class="btn btn-info" value="Редактировать данные"/>
     </form>
 
-    <hr>
-    <form th:method="DELETE"
-          th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
-        <h5>Удаление клиента</h5>
-        <div style="color: red;" th:if="${deleteClientError}">
-            <p th:text="${deleteClientError}"></p>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+            style="display: inline-block">Удалить клиента
+    </button>
+
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Предупреждение</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Отмена"></button>
+                </div>
+                <form th:method="DELETE"
+                      th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
+                    <div class="modal-body">
+                        <p>Внимание! Это действие приведёт к безвозвратному удалению клиента и его банковских счетов</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <input type="submit" class="btn btn-danger" value="Удалить"/>
+                    </div>
+                </form>
+            </div>
         </div>
-        <input type="submit" value="Удалить"/>
-    </form>
+    </div>
+
+    <div class="alert alert-danger" role="alert" th:if="${deleteClientError}">
+        <p th:text="${deleteClientError}"></p>
+    </div>
 </div>
 
-<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

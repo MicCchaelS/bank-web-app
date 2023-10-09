@@ -4,71 +4,59 @@
     <meta charset="UTF-8">
     <title>Банковские счета</title>
 
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.1/css/bootstrap.min.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
 </head>
-<body>
+<body class="bg-success p-2 text-dark bg-opacity-25">
 
-<a th:href="@{/api/clients}" class="btn btn-primary btn-sm">Список клиентов</a>
-<a th:href="@{/api/clients/{clientId}(clientId=${clientId})}"
-   class="btn btn-secondary btn-sm">Текущий клиент</a>
-<hr>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
+    <div class="container" style="display: inline-block">
+        <a class="btn btn-primary" th:href="@{/api/clients}">Список клиентов</a>
+        <a class="btn btn-secondary" th:href="@{/api/clients/{clientId}(clientId=${clientId})}">Текущий клиент</a>
+    </div>
+</nav>
 
-<div align="center">
-    <h2>Банковские счета клиента</h2>
-    <hr>
-</div>
+<div class="container mt-4" style="text-align: center">
+    <h2 class="mb-4">Банковские счета клиента</h2>
 
-<div align="center">
-    <div th:if="${accounts.isEmpty()}">
+    <div th:if="${accounts.isEmpty()}" class="fs-5 mb-3">
         <p>Нет открытых банковских счетов</p>
-        <hr>
     </div>
-</div>
 
-<div align="center">
-    <form th:method="POST" th:action="@{/api/clients/{clientId}/accounts(clientId=${clientId})}">
-        <input type="submit" value="Создать новый счёт"/>
+    <form th:method="POST" th:action="@{/api/clients/{clientId}/accounts(clientId=${clientId})}" class="mb-3">
+        <input type="submit" class="btn btn-success" value="Создать новый счёт"/>
     </form>
-    <br>
-</div>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div th:if="${!accounts.isEmpty()}">
-                <table id="example" class="table table-bordered" style="width: 100%">
-                    <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Номер счёта</th>
-                        <th>Баланс (₽)</th>
-                        <th>Статус</th>
-                        <th>Полная информация</th>
-                    </tr>
-                    </thead>
+    <div th:if="${!accounts.isEmpty()}">
+        <table class="table table-bordered table-striped table-hover" style="text-align: left">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Номер счёта</th>
+                <th>Баланс</th>
+                <th>Статус</th>
+                <th>Полная информация</th>
+            </tr>
+            </thead>
 
-                    <tbody>
-                    <tr th:each="account : ${accounts}">
-                        <td th:text="${accountStat.index+1}">№</td>
-                        <td th:text="${account.accountNumber}">Номер счёта</td>
-                        <td th:text="${account.balance} + ' ₽'">Баланс</td>
-                        <td th:text="${account.status.statusName}">Статус</td>
-                        <td>
-                            <form th:method="GET"
-                                  th:action="@{/api/clients/{clientId}/accounts/{accountId}
-                                                            (clientId=${clientId}, accountId=${account.id})}">
-                                <input type="submit" value="Подробнее"/>
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            <tbody>
+            <tr th:each="account : ${accounts}">
+                <td th:text="${accountStat.index+1}">#</td>
+                <td th:text="${account.accountNumber}">Номер счёта</td>
+                <td th:text="${account.balance} + ' ₽'">Баланс</td>
+                <td th:text="${account.status.statusName}">Статус</td>
+                <td>
+                    <form th:method="GET" th:action="@{/api/clients/{clientId}/accounts/{accountId}
+                                                                    (clientId=${clientId}, accountId=${account.id})}">
+                        <input type="submit" value="Подробнее"/>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<script th:src="@{/webjars/bootstrap/5.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.min.js}"></script>
 
 </body>
 </html>

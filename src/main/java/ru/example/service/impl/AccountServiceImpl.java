@@ -45,14 +45,14 @@ public class AccountServiceImpl implements AccountService {
     public AccountDTO findAccountById(int accountId) {
         return accountRepository.findById(accountId)
                 .map(account -> modelMapperUtil.map(account, AccountDTO.class))
-                .orElseThrow(() -> new ResourceNotFoundException("Банковский счёт не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Банковский счёт не найден"));
     }
 
     @Transactional
     @Override
     public AccountDTO saveAccount(int clientId) {
         var client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new ResourceNotFoundException("Клиент не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден"));
 
         var account = createNewAccount();
 
@@ -69,7 +69,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void topUpAccountBalance(int accountId, BigDecimal amount) {
         var account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new ResourceNotFoundException("Банковский счёт не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Банковский счёт не найден"));
 
         var newBalance = account.getBalance().add(amount);
         account.setBalance(newBalance);
@@ -84,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void withdrawMoneyFromAccount(int accountId, BigDecimal amount) {
         var account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new ResourceNotFoundException("Банковский счёт не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Банковский счёт не найден"));
 
         account.setBalance(account.getBalance().subtract(amount));
 
@@ -98,7 +98,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void closeAccount(int accountId) {
         var account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new ResourceNotFoundException("Банковский счёт не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Банковский счёт не найден"));
 
         if (account.getStatus() == AccountStatus.CLOSED) {
             throw new ClosedAccountException("Ошибка закрытия счёта. Этот счёт уже закрыт");

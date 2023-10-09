@@ -22,7 +22,7 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
-    
+
     private final ModelMapperUtil modelMapperUtil;
 
     @Override
@@ -37,7 +37,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO findClientById(int id) {
         return clientRepository.findById(id)
                 .map(client -> modelMapperUtil.map(client, ClientDTO.class))
-                .orElseThrow(() -> new ResourceNotFoundException("Клиент не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден"));
     }
 
     @Transactional
@@ -62,21 +62,18 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public void deleteClient(int id) {
-        clientRepository.findById(id)
-                .ifPresentOrElse(
-                        client -> {
-                            if (client.getAccounts()
-                                    .stream()
-                                    .anyMatch(account -> account.getStatus() == AccountStatus.OPEN)) {
-                                throw new DeleteClientException("Ошибка удаления клиента. " +
-                                        "Сначала требуется закрыть все открытые банковские счета клиента", id);
-                            }
+        var client = clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден"));
 
-                            clientRepository.delete(client);
-                        },
-                        () -> {
-                            throw new ResourceNotFoundException("Клиент не найден");
-                        }
-                );
+        var openAccountExists = client.getAccounts()
+                .stream()
+                .anyMatch(account -> account.getStatus() == AccountStatus.OPEN);
+
+        if (openAccountExists) {
+            throw new DeleteClientException("Ошибка удаления клиента. " +
+                    "Сначала требуется закрыть все открытые банковские счета клиента", id);
+        }
+
+        clientRepository.delete(client);
     }
 }
