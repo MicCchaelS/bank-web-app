@@ -31,11 +31,21 @@
           th:object="${account}">
         <input type="hidden" th:field="*{id}"><input type="hidden" th:field="*{accountNumber}"><input type="hidden" th:field="*{balance}"><input type="hidden" th:field="*{status}"><input type="hidden" th:field="*{operationType}">
 
-        <div class="mb-3">
-            <p th:text="'Баланс: ' + *{balance} + ' ₽'"/>
-            <label for="amount">Введите сумму, которую требуется зачислить (Мин. 1 ₽): </label>
-            <input type="text" th:field="*{amount}" id="amount" placeholder="1000"/>
-            <div style="color:red" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+        <div class="fs-5" style="text-align: end">
+            <div class="mb-3 row">
+                <label for="balance" class="col-sm-6 col-form-label">Баланс ₽:</label>
+                <div class="col-md-3">
+                    <input type="text" th:field="*{balance}" readonly class="form-control-plaintext" id="balance"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="amount" class="col-sm-6 col-form-label">Введите сумму, которую требуется зачислить (Мин. 1 ₽):</label>
+                <div class="col-md-3">
+                    <input type="text" th:field="*{amount}" class="form-control" id="amount" placeholder="1000"/>
+                </div>
+                <div style="color:red; text-align: center" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+            </div>
         </div>
 
         <input type="submit" class="btn btn-success" value="Пополнить"/>

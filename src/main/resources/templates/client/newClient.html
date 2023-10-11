@@ -13,38 +13,57 @@
     </div>
 </nav>
 
-<div class="container mt-4" style="text-align: center">
-    <h2 class="mb-4">Добавление нового клиента</h2>
+<div class="container mt-4">
+    <h2 class="mb-4" style="text-align: center">Добавление нового клиента</h2>
 
     <form th:method="POST" th:action="@{/api/clients}" th:object="${client}">
         <div class="mb-3">
-            <label for="lastName">Введите фамилию: </label>
-            <input type="text" th:field="*{lastName}" id="lastName" placeholder="Иванов"/>
-            <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+            <div class="col-md-4">
+                <label for="lastName" class="form-label">Введите фамилию: </label>
+                <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="Иванов"/>
+            </div>
+            <div style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="firstName">Введите имя: </label>
-            <input type="text" th:field="*{firstName}" id="firstName" placeholder="Иван"/>
+            <div class="col-md-4">
+                <label for="firstName" class="form-label">Введите имя: </label>
+                <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="Иван"/>
+            </div>
             <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="middleName">Введите отчество: </label>
-            <input type="text" th:field="*{middleName}" id="middleName" placeholder="Иванович"/>
+            <div class="col-md-4">
+                <label for="middleName" class="form-label">Введите отчество: </label>
+                <input type="text" th:field="*{middleName}" class="form-control" id="middleName"
+                       placeholder="Иванович"/>
+            </div>
             <div style="color:red" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="birthDate">Введите дату рождения: </label>
-            <input type="date" th:field="*{birthDate}" id="birthDate"/>
-            <div style="color:red" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
+            <div class="col-md-2">
+                <label for="birthdate" class="form-label">Введите дату рождения: </label>
+                <input type="text" th:field="*{getBirthdate}" class="form-control" id="birthdate" placeholder="01.01.2023"/>
+            </div>
+            <div style="color:red" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{getBirthdate}"></div>
         </div>
 
         <div class="mb-3">
-            <label for="snils">Введите СНИЛС: </label>
-            <input type="text" th:field="*{snils}" id="snils" placeholder="123-456-789 01"/>
+            <div class="col-md-2">
+                <label for="snils" class="form-label">Введите СНИЛС: </label>
+                <input type="text" th:field="*{snils}" class="form-control" id="snils" placeholder="123-456-789 01"/>
+            </div>
             <div style="color:red" th:if="${#fields.hasErrors('snils')}" th:errors="*{snils}"></div>
+        </div>
+
+        <div class="mb-3">
+            <div class="col-md-2">
+                <label for="phoneNumber" class="form-label">Введите номер телефона: </label>
+                <input type="tel" th:field="*{phoneNumber}" class="form-control" id="phoneNumber" placeholder="+79876543210"/>
+            </div>
+            <div style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
         </div>
 
         <input type="submit" class="btn btn-success" value="Создать"/>

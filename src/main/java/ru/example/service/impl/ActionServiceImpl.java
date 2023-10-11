@@ -25,7 +25,7 @@ public class ActionServiceImpl implements ActionService {
         action.setOperationType(operationType);
         action.setAmount(amount);
         action.setReminder(reminder);
-        action.setOperationDate(LocalDateTime.now());
+        action.setOperationDateTime(LocalDateTime.now());
         return action;
     }
 }

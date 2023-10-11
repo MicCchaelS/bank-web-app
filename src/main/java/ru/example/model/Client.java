@@ -30,11 +30,14 @@ public class Client {
     @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
+    @Column(name = "birthdate")
+    private LocalDate birthdate;
 
     @Column(name = "snils")
     private String snils;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Account> accounts;

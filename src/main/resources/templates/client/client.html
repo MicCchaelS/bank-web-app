@@ -14,15 +14,51 @@
     </div>
 </nav>
 
-<div class="container mt-4" style="text-align: center">
-    <h2 class="mb-4">Информация о клиенте</h2>
+<div class="container mt-4">
+    <h2 class="mb-4" style="text-align: center">Информация о клиенте</h2>
 
-    <div class="mb-3 fs-5">
-        <p th:text="'Фамилия: ' + ${client.lastName}"/>
-        <p th:text="'Имя: ' + ${client.firstName}"/>
-        <p th:text="'Отчество: ' + ${client.middleName}"/>
-        <p th:text="'Дата рождения: ' + ${#temporals.format(client.birthDate, 'dd.MM.yyyy')}"/>
-        <p th:text="'СНИЛС: ' + ${client.snils}"/>
+    <div class="fs-5">
+        <div class="mb-3 row">
+            <label for="lastName" class="col-sm-2 col-form-label">Фамилия:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="lastName" th:field="${client.lastName}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="firstName" class="col-sm-2 col-form-label">Имя:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="firstName" th:field="${client.firstName}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="middleName" class="col-sm-2 col-form-label">Отчество:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="middleName" th:field="${client.middleName}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="birthdate" class="col-sm-2 col-form-label">Дата рождения:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="birthdate" th:field="${client.getBirthdate}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="snils" class="col-sm-2 col-form-label">СНИЛС:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="snils" th:field="${client.snils}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="phoneNumber" class="col-sm-2 col-form-label">Номер телефона:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="phoneNumber" th:field="${client.phoneNumber}">
+            </div>
+        </div>
     </div>
     <hr>
 

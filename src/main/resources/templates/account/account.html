@@ -17,18 +17,34 @@
     </div>
 </nav>
 
-<div class="container mt-4" style="text-align: center">
-    <h2 class="mb-4">Информация о банковском счёте</h2>
+<div class="container mt-4">
+    <h2 class="mb-4" style="text-align: center">Информация о банковском счёте</h2>
 
-    <div class="mb-3 fs-5">
-        <p th:text="'Номер счёта: ' + ${account.accountNumber}"/>
-        <p th:text="'Баланс: ' + ${account.balance} + ' ₽'"/>
-        <p th:text="'Статус: ' + ${account.status.statusName}"/>
+    <div class="fs-5">
+        <div class="mb-3 row">
+            <label for="accountNumber" class="col-sm-2 col-form-label">Номер счёта:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="accountNumber" th:field="${account.accountNumber}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="balance" class="col-sm-2 col-form-label">Баланс ₽:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="balance" th:field="${account.balance}">
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="status" class="col-sm-2 col-form-label">Статус:</label>
+            <div class="col-sm-10">
+                <input type="text" readonly class="form-control-plaintext" id="status" th:field="${account.status.statusName}">
+            </div>
+        </div>
     </div>
 
     <div th:if="${!account.status.name().equals('CLOSED')}">
         <hr>
-
         <form th:method="GET"
               th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up
                                         (clientId=${clientId}, accountId=${account.id})}"

@@ -31,8 +31,8 @@ public class Action {
     @Column(name = "reminder")
     private BigDecimal reminder;
 
-    @Column(name = "operation_date")
-    private LocalDateTime operationDate;
+    @Column(name = "operation_date_time")
+    private LocalDateTime operationDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")

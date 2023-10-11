@@ -22,12 +22,12 @@ public class AgeRangeValidator implements ConstraintValidator<AgeRange, LocalDat
     }
 
     @Override
-    public boolean isValid(LocalDate birthDate, ConstraintValidatorContext context) {
-        if (birthDate == null) {
+    public boolean isValid(LocalDate birthdate, ConstraintValidatorContext context) {
+        if (birthdate == null) {
             return true;
         }
 
-        int age = Period.between(birthDate, LocalDate.now()).getYears();
+        int age = Period.between(birthdate, LocalDate.now()).getYears();
 
         return age >= min && age <= max;
     }
