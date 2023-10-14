@@ -37,9 +37,9 @@
 
         <div class="mb-3">
             <div class="col-md-4">
-                <label for="middleName" class="form-label">Введите отчество: </label>
-                <input type="text" th:field="*{middleName}" class="form-control" id="middleName"
-                       placeholder="Иванович"/>
+                <label for="middleName" class="form-label">Введите отчество (при наличии): </label>
+                <input type="text" th:field="*{middleName}" class="form-control" id="middleName" placeholder="Иванович"/>
+                <small class="text-muted">или оставьте поле пустым</small>
             </div>
             <div style="color:red" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></div>
         </div>
@@ -47,23 +47,25 @@
         <div class="mb-3">
             <div class="col-md-2">
                 <label for="birthdate" class="form-label">Введите дату рождения: </label>
-                <input type="text" th:field="*{getBirthdate}" class="form-control" id="birthdate" placeholder="01.01.2023"/>
+                <input type="text" th:field="*{birthdate}" class="form-control" id="birthdate" placeholder="01.01.2023"/>
             </div>
-            <div style="color:red" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{getBirthdate}"></div>
+            <div style="color:red" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}"></div>
         </div>
 
         <div class="mb-3">
+            <label for="snils" class="form-label">Введите СНИЛС (при необходимости): </label>
             <div class="col-md-2">
-                <label for="snils" class="form-label">Введите СНИЛС: </label>
                 <input type="text" th:field="*{snils}" class="form-control" id="snils" placeholder="123-456-789 01"/>
+                <small class="text-muted">или оставьте поле пустым</small>
             </div>
             <div style="color:red" th:if="${#fields.hasErrors('snils')}" th:errors="*{snils}"></div>
         </div>
 
         <div class="mb-3">
+            <label for="phoneNumber" class="form-label">Введите номер телефона (при необходимости): </label>
             <div class="col-md-2">
-                <label for="phoneNumber" class="form-label">Введите номер телефона: </label>
                 <input type="tel" th:field="*{phoneNumber}" class="form-control" id="phoneNumber" placeholder="+79876543210"/>
+                <small class="text-muted">или оставьте поле пустым</small>
             </div>
             <div style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
         </div>

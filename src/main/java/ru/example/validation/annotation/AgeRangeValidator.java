@@ -1,9 +1,9 @@
-package ru.example.validation.validator;
+package ru.example.validation.annotation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
-import ru.example.validation.AgeRange;
+import ru.example.validation.annotation.AgeRange;
 
 import java.time.LocalDate;
 import java.time.Period;

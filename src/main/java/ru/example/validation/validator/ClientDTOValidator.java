@@ -27,30 +27,43 @@ public class ClientDTOValidator implements Validator {
 
         var clientDTO = (ClientDTO) target;
 
-        // Если при создании клиента
         if (clientDTO.getId() == 0) {
-            // введённый СНИЛС уже используется
-            if (clientRepository.existsClientBySnils(clientDTO.getSnils())) {
-                errors.rejectValue("snils", "", "Этот СНИЛС уже используется");
-            }
+            validateNewClient(clientDTO, errors);
+        } else {
+            validateExistingClient(clientDTO, errors);
+        }
+    }
 
-            // номер телефона уже используется
-            if (clientRepository.existsClientByPhoneNumber(clientDTO.getPhoneNumber())) {
-                errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется");
-            }
+    /** Валидация клиента при его создании */
+    private void validateNewClient(ClientDTO clientDTO, Errors errors) {
+        var snils = clientDTO.getSnils();
+        var phoneNumber = clientDTO.getPhoneNumber();
+
+        // Если СНИЛС был указан и уже используется
+        if (!snils.isEmpty() && clientRepository.existsClientBySnils(snils)) {
+            errors.rejectValue("snils", "", "Этот СНИЛС уже используется");
         }
 
-        // Если при изменении данных клиента
-        if (clientDTO.getId() != 0) {
-            // введённый СНИЛС уже используется (без учёта текущего СНИЛСа клиента)
-            if (clientRepository.existsClientBySnilsAndIdNot(clientDTO.getSnils(), clientDTO.getId())) {
-                errors.rejectValue("snils", "", "Этот СНИЛС уже используется");
-            }
+        // Если номер телефона был указан и уже используется
+        if (!phoneNumber.isEmpty() && clientRepository.existsClientByPhoneNumber(phoneNumber)) {
+            errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется");
+        }
+    }
 
-            // введённый номер телефона уже используется (без учёта текущего номера телефона клиента)
-            if (clientRepository.existsClientByPhoneNumberAndIdNot(clientDTO.getPhoneNumber(), clientDTO.getId())) {
-                errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется");
-            }
+    /** Валидация клиента при его изменении */
+    private void validateExistingClient(ClientDTO clientDTO, Errors errors) {
+        var clientId = clientDTO.getId();
+        var snils = clientDTO.getSnils();
+        var phoneNumber = clientDTO.getPhoneNumber();
+
+        // Если СНИЛС был указан и уже используется (без учёта текущего СНИЛСа клиента)
+        if (!snils.isEmpty() && clientRepository.existsClientBySnilsAndIdNot(snils, clientId)) {
+            errors.rejectValue("snils", "", "Этот СНИЛС уже используется");
+        }
+
+        // Если номер телефона был указан и уже используется (без учёта текущего номера телефона клиента)
+        if (!phoneNumber.isEmpty() && clientRepository.existsClientByPhoneNumberAndIdNot(phoneNumber, clientId)) {
+            errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется");
         }
     }
 }

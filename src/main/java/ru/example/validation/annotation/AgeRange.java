@@ -1,8 +1,7 @@
-package ru.example.validation;
+package ru.example.validation.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import ru.example.validation.validator.AgeRangeValidator;
 
 import java.lang.annotation.*;
 
