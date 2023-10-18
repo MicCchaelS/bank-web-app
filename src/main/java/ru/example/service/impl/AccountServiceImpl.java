@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<AccountsDTO> findAllByClientId(int clientId) {
-        return accountRepository.findAccountsByClient_Id(clientId)
+        return accountRepository.findAllByClientId(clientId)
                 .stream()
                 .map(account -> modelMapperUtil.map(account, AccountsDTO.class))
                 .toList();
@@ -143,7 +143,7 @@ public class AccountServiceImpl implements AccountService {
 
                 accountNumber.append(ThreadLocalRandom.current().nextInt(0, 10));
             }
-        } while (accountRepository.existsAccountByAccountNumber(accountNumber.toString()));
+        } while (accountRepository.existsByAccountNumber(accountNumber.toString()));
 
         return accountNumber.toString();
     }

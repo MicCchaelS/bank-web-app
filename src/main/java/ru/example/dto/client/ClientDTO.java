@@ -16,10 +16,12 @@ public class ClientDTO {
 
     private int id;
 
+    @NotNull(message = "Это поле не может быть null")
     @Pattern(regexp = "^[А-ЯЁ][а-яё]{1,34}$", message = "Фамилия должна содержать от 2 до 35 символов, " +
             "только русские буквы и начинаться с заглавной буквы (Пример: \"Иванов\").")
     private String lastName;
 
+    @NotNull(message = "Это поле не может быть null")
     @Pattern(regexp = "^[А-ЯЁ][а-яё]{1,34}$", message = "Имя должно содержать от 2 до 35 символов, " +
             "только русские буквы и начинаться с заглавной буквы (Пример: \"Иван\").")
     private String firstName;
@@ -43,6 +45,6 @@ public class ClientDTO {
 
     @NotNull(message = "Это поле не может быть null")
     @Pattern(regexp = "^$|^\\+\\d{10,12}$", message = "Номер телефона должен быть записан в следующем " +
-            "формате: \"+XXXXXXXXXXX\" и содержать от 10 до 12 цифр (Пример: +79876543210).")
+            "формате: \"+XXXXXXXXXXX\" и содержать от 10 до 12 цифр (Пример: \"+79876543210\").")
     private String phoneNumber;
 }

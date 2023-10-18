@@ -29,6 +29,7 @@
                 <th>Фамилия</th>
                 <th>Имя</th>
                 <th>Отчество</th>
+                <th>Серия и номер паспорта</th>
                 <th>Полная информация</th>
             </tr>
             </thead>
@@ -39,6 +40,7 @@
                 <td th:text="${client.lastName}">Фамилия</td>
                 <td th:text="${client.firstName}">Имя</td>
                 <td th:text="${client.middleName}">Отчество</td>
+                <td th:text="${client.seriesNumber}">Серия и номер паспорта</td>
                 <td>
                     <form th:method="GET" th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
                         <input type="submit" value="Подробнее"/>

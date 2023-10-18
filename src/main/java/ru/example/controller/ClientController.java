@@ -7,8 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.example.dto.client.ClientDTO;
+import ru.example.dto.passport.PassportDTO;
 import ru.example.service.ClientService;
+import ru.example.service.PassportService;
 import ru.example.validation.validator.ClientDTOValidator;
+import ru.example.validation.validator.PassportDTOValidator;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,57 +19,80 @@ import ru.example.validation.validator.ClientDTOValidator;
 public class ClientController {
 
     private final ClientService clientService;
+    private final PassportService passportService;
 
     private final ClientDTOValidator clientDTOValidator;
+    private final PassportDTOValidator passportDTOValidator;
 
     @GetMapping
-    public String findAllClients(Model model) {
-        model.addAttribute("clients", clientService.findAllClients());
+    public String findSpecificClientsPassportsFields(Model model) {
+        model.addAttribute("clients", clientService.findSpecificClientsPassportsFields());
         return "client/clients";
     }
 
     @GetMapping("/{id}")
-    public String findClientById(@PathVariable("id") int id, Model model) {
+    public String findClientAndPassportByClientId(@PathVariable("id") int id, Model model) {
         model.addAttribute("client", clientService.findClientById(id));
+        model.addAttribute("passport", passportService.findPassportByClientId(id));
         return "client/client";
     }
 
     @GetMapping("/new")
-    public String showNewClientForm(@ModelAttribute("client") ClientDTO clientDTO) {
+    public String showNewClientPassportPage(@ModelAttribute("client") ClientDTO clientDTO,
+                                            @ModelAttribute("passport") PassportDTO passportDTO) {
         return "client/newClient";
     }
 
     @PostMapping
-    public String createClient(@ModelAttribute("client") @Valid ClientDTO clientDTO,
-                         BindingResult bindingResult) {
-        clientDTOValidator.validate(clientDTO, bindingResult);
+    public String createClientAndPassport(@ModelAttribute("client") @Valid ClientDTO clientDTO,
+                                          BindingResult bindingResultClient,
+                                          @ModelAttribute("passport") @Valid PassportDTO passportDTO,
+                                          BindingResult bindingResultPassport) {
+        clientDTOValidator.validate(clientDTO, bindingResultClient);
+        passportDTOValidator.validate(passportDTO, bindingResultPassport);
 
-        return bindingResult.hasErrors()
-                ? "client/newClient"
-                : "redirect:/api/clients/" + clientService.saveClient(clientDTO).getId();
+        if (bindingResultClient.hasErrors() || bindingResultPassport.hasErrors()) {
+            return "client/newClient";
+        }
+
+        var client = clientService.saveClient(clientDTO);
+        passportService.savePassport(passportDTO, client);
+
+        return "redirect:/api/clients/" + client.getId();
     }
 
+    private int passportId;
+
     @GetMapping("/{id}/edit")
-    public String showEditClientForm(@PathVariable("id") int id, Model model) {
+    public String showEditClientPassportPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("client", clientService.findClientById(id));
+
+        PassportDTO passportDTO = passportService.findPassportByClientId(id);
+        passportId = passportDTO.getId();
+        model.addAttribute("passport", passportDTO);
         return "client/editClient";
     }
 
     @PatchMapping("/{id}")
-    public String updateClient(@ModelAttribute("client") @Valid ClientDTO clientDTO,
-                               BindingResult bindingResult) {
-        clientDTOValidator.validate(clientDTO, bindingResult);
+    public String updateClientAndPassport(@ModelAttribute("client") @Valid ClientDTO clientDTO,
+                                          BindingResult bindingResultClient,
+                                          @ModelAttribute("passport") @Valid PassportDTO passportDTO,
+                                          BindingResult bindingResultPassport) {
+        passportDTO.setId(passportId);
+        clientDTOValidator.validate(clientDTO, bindingResultClient);
+        passportDTOValidator.validate(passportDTO, bindingResultPassport);
 
-        if (bindingResult.hasErrors()) {
+        if (bindingResultClient.hasErrors() || bindingResultPassport.hasErrors()) {
             return "client/editClient";
         }
 
+        passportService.updatePassport(passportDTO);
         clientService.updateClient(clientDTO);
         return "redirect:/api/clients/{id}";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteClient(@PathVariable("id") int id) {
+    public String deleteClientAndPassport(@PathVariable("id") int id) {
         clientService.deleteClient(id);
         return "redirect:/api/clients";
     }

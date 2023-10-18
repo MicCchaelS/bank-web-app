@@ -39,7 +39,7 @@ public class PassportDTOValidator implements Validator {
         var seriesNumber = passportDTO.getSeriesNumber();
 
         // Если указанные серия и номер паспорта уже используются
-        if (passportRepository.existsPassportBySeriesNumber(seriesNumber)) {
+        if (passportRepository.existsBySeriesNumber(seriesNumber)) {
             errors.rejectValue("seriesNumber", "", "Эти серия и номер паспорта уже используется");
         }
     }
@@ -50,7 +50,7 @@ public class PassportDTOValidator implements Validator {
         var seriesNumber = passportDTO.getSeriesNumber();
 
         // Если указанные серия и номер паспорта уже используются (без учёта текущих серии и номера паспорта клиента)
-        if (passportRepository.existsPassportBySeriesNumberAndIdNot(seriesNumber, passportId)) {
+        if (passportRepository.existsBySeriesNumberAndIdNot(seriesNumber, passportId)) {
             errors.rejectValue("seriesNumber", "", "Эти серия и номер паспорта уже используется");
         }
     }

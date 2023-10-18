@@ -1,10 +1,11 @@
 package ru.example.dto.client;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ClientsDTO {
 
     private int id;
@@ -14,4 +15,6 @@ public class ClientsDTO {
     private String firstName;
 
     private String middleName;
+
+    private String seriesNumber;
 }

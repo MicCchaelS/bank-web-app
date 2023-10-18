@@ -41,7 +41,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}/top-up")
-    public String showTopUpAccountForm(@PathVariable("clientId") int clientId,
+    public String showTopUpAccountPage(@PathVariable("clientId") int clientId,
                                        @PathVariable("accountId") int accountId,
                                        Model model) {
         model.addAttribute("account", accountService.findAccountById(accountId));
@@ -67,7 +67,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}/withdraw")
-    public String showWithdrawAccountForm(@PathVariable("clientId") int clientId,
+    public String showWithdrawAccountPage(@PathVariable("clientId") int clientId,
                                           @PathVariable("accountId") int accountId,
                                           Model model) {
         model.addAttribute("account", accountService.findAccountById(accountId));

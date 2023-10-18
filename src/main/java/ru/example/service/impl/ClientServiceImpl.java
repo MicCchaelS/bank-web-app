@@ -11,6 +11,7 @@ import ru.example.model.Client;
 import ru.example.model.enums.AccountStatus;
 import ru.example.repository.ClientRepository;
 import ru.example.service.ClientService;
+import ru.example.service.PassportService;
 import ru.example.util.ModelMapperUtil;
 
 import java.util.List;
@@ -25,12 +26,11 @@ public class ClientServiceImpl implements ClientService {
 
     private final ModelMapperUtil modelMapperUtil;
 
+    private final PassportService passportService;
+
     @Override
-    public List<ClientsDTO> findAllClients() {
-        return clientRepository.findAll()
-                .stream()
-                .map(client -> modelMapperUtil.map(client, ClientsDTO.class))
-                .toList();
+    public List<ClientsDTO> findSpecificClientsPassportsFields() {
+        return clientRepository.findClientsWithPassports();
     }
 
     @Override
@@ -42,11 +42,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Transactional
     @Override
-    public ClientDTO saveClient(ClientDTO clientDTO) {
+    public Client saveClient(ClientDTO clientDTO) {
         return Optional.of(clientDTO)
                 .map(dto -> modelMapperUtil.map(dto, Client.class))
                 .map(clientRepository::save)
-                .map(client -> modelMapperUtil.map(client, ClientDTO.class))
                 .orElseThrow();
     }
 
@@ -74,6 +73,7 @@ public class ClientServiceImpl implements ClientService {
                     "Сначала требуется закрыть все открытые банковские счета клиента", id);
         }
 
+        passportService.deletePassportByClientId(id);
         clientRepository.delete(client);
     }
 }

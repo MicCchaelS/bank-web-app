@@ -18,90 +18,155 @@
     <h2 class="mb-4" style="text-align: center">Информация о клиенте</h2>
 
     <div class="fs-5">
-        <div class="mb-3 row">
-            <label for="lastName" class="col-sm-2 col-form-label">Фамилия:</label>
-            <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="lastName" th:field="${client.lastName}">
-            </div>
-        </div>
+        <fieldset th:object="${client}">
+            <h4 class="mb-4">Основные данные:</h4>
 
-        <div class="mb-3 row">
-            <label for="firstName" class="col-sm-2 col-form-label">Имя:</label>
-            <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="firstName" th:field="${client.firstName}">
+            <div class="mb-3 row">
+                <label for="lastName" class="col-sm-3 col-form-label">Фамилия:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="lastName" th:field="*{lastName}">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="middleName" class="col-sm-2 col-form-label">Отчество:</label>
-            <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="middleName" th:field="${client.middleName}">
+            <div class="mb-3 row">
+                <label for="firstName" class="col-sm-3 col-form-label">Имя:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="firstName" th:field="*{firstName}">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="birthdate" class="col-sm-2 col-form-label">Дата рождения:</label>
-            <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="birthdate" th:field="${client.birthdate}">
+            <div class="mb-3 row">
+                <label for="middleName" class="col-sm-3 col-form-label">Отчество:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="middleName" th:field="*{middleName}">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="snils" class="col-sm-2 col-form-label">СНИЛС:</label>
-            <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="snils" th:field="${client.snils}">
+            <div class="mb-3 row">
+                <label for="birthdate" class="col-sm-3 col-form-label">Дата рождения:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="birthdate" th:field="*{birthdate}">
+                </div>
             </div>
-        </div>
 
-        <div class="mb-3 row">
-            <label for="phoneNumber" class="col-sm-2 col-form-label">Номер телефона:</label>
-            <div class="col-sm-10">
-                <input type="text" readonly class="form-control-plaintext" id="phoneNumber" th:field="${client.phoneNumber}">
+            <div class="mb-3 row">
+                <label for="snils" class="col-sm-3 col-form-label">СНИЛС:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="snils" th:field="*{snils}">
+                </div>
             </div>
-        </div>
+
+            <div class="mb-3 row">
+                <label for="phoneNumber" class="col-sm-3 col-form-label">Номер телефона:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="phoneNumber" th:field="*{phoneNumber}">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset th:object="${passport}">
+            <h4 class="mb-4">Паспортные данные:</h4>
+
+            <div class="mb-3 row">
+                <label for="citizenship" class="col-sm-3 col-form-label">Гражданство:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="citizenship" th:field="*{citizenship.countryName}">
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="seriesNumber" class="col-sm-3 col-form-label">Серия и номер паспорта:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="seriesNumber" th:field="*{seriesNumber}">
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="sex" class="col-sm-3 col-form-label">Пол:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="sex" th:field="*{sex.translation}">
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="birthplace" class="col-sm-3 col-form-label">Место рождения:</label>
+                <div class="col-sm-8">
+                    <textarea readonly class="form-control-plaintext" rows="2" id="birthplace" th:field="*{birthplace}"></textarea>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="issueDate" class="col-sm-3 col-form-label">Дата выдачи:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="issueDate" th:field="*{issueDate}">
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="departmentCode" class="col-sm-3 col-form-label">Код подразделения:</label>
+                <div class="col-sm-8">
+                    <input type="text" readonly class="form-control-plaintext" id="departmentCode" th:field="*{departmentCode}">
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="issuedBy" class="col-sm-3 col-form-label">Кем выдан:</label>
+                <div class="col-sm-8">
+                    <textarea readonly class="form-control-plaintext" rows="2" id="issuedBy" th:field="*{issuedBy}"></textarea>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="registrationAddress" class="col-sm-3 col-form-label">Адрес регистрации:</label>
+                <div class="col-sm-8">
+                    <textarea readonly class="form-control-plaintext" rows="2" id="registrationAddress" th:field="*{registrationAddress}"></textarea>
+                </div>
+            </div>
+        </fieldset>
     </div>
     <hr>
 
-    <form th:method="GET"
-          th:action="@{/api/clients/{clientId}/accounts(clientId=${client.id})}"
-          style="display: inline-block">
-        <input type="submit" class="btn btn-success" value="Банковские счета"/>
-    </form>
+    <div style="text-align: center">
+        <form th:method="GET"
+              th:action="@{/api/clients/{clientId}/accounts(clientId=${client.id})}"
+              style="display: inline-block">
+            <input type="submit" class="btn btn-success" value="Банковские счета"/>
+        </form>
 
-    <form th:method="GET"
-          th:action="@{/api/clients/{clientId}/edit(clientId=${client.id})}"
-          style="display: inline-block">
-        <input type="submit" class="btn btn-info" value="Редактировать данные"/>
-    </form>
+        <form th:method="GET"
+              th:action="@{/api/clients/{clientId}/edit(clientId=${client.id})}"
+              style="display: inline-block">
+            <input type="submit" class="btn btn-info" value="Редактировать данные"/>
+        </form>
 
-    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-            style="display: inline-block">Удалить клиента
-    </button>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                style="display: inline-block">Удалить клиента
+        </button>
 
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Предупреждение</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Отмена"></button>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Предупреждение</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Отмена"></button>
+                    </div>
+                    <form th:method="DELETE" th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
+                        <div class="modal-body">
+                            <p>Внимание! Это действие приведёт к безвозвратному удалению данных клиента и его банковских счетов</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                            <input type="submit" class="btn btn-danger" value="Удалить"/>
+                        </div>
+                    </form>
                 </div>
-                <form th:method="DELETE"
-                      th:action="@{/api/clients/{clientId}(clientId=${client.id})}">
-                    <div class="modal-body">
-                        <p>Внимание! Это действие приведёт к безвозвратному удалению клиента и его банковских счетов</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                        <input type="submit" class="btn btn-danger" value="Удалить"/>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
 
-    <div class="alert alert-danger" role="alert" th:if="${deleteClientError}">
-        <p th:text="${deleteClientError}"></p>
+        <div class="alert alert-danger" role="alert" th:if="${deleteClientError}">
+            <p th:text="${deleteClientError}"></p>
+        </div>
     </div>
 </div>
 

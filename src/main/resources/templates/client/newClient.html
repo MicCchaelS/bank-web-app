@@ -16,59 +16,173 @@
 <div class="container mt-4">
     <h2 class="mb-4" style="text-align: center">Добавление нового клиента</h2>
 
-    <form th:method="POST" th:action="@{/api/clients}" th:object="${client}">
-        <div class="mb-3">
-            <div class="col-md-4">
-                <label for="lastName" class="form-label">Введите фамилию: </label>
-                <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="Иванов"/>
-            </div>
-            <div style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
-        </div>
+    <form th:method="POST" th:action="@{/api/clients}">
+        <fieldset th:object="${client}">
+            <h4 class="mb-4">Основные данные:</h4>
 
-        <div class="mb-3">
-            <div class="col-md-4">
-                <label for="firstName" class="form-label">Введите имя: </label>
-                <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="Иван"/>
+            <div class="mb-3">
+                <div class="row">
+                    <label for="lastName" class="col-sm-3 col-form-label">Фамилия:</label>
+                    <div class="col-md-4">
+                        <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="Иванов"/>
+                    </div>
+                    <div class="col-auto" style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                </div>
             </div>
-            <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
-        </div>
 
-        <div class="mb-3">
-            <div class="col-md-4">
-                <label for="middleName" class="form-label">Введите отчество (при наличии): </label>
-                <input type="text" th:field="*{middleName}" class="form-control" id="middleName" placeholder="Иванович"/>
-                <small class="text-muted">или оставьте поле пустым</small>
+            <div class="mb-3">
+                <div class="row">
+                    <label for="firstName" class="col-sm-3 col-form-label">Имя:</label>
+                    <div class="col-md-4">
+                        <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="Иван"/>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                </div>
             </div>
-            <div style="color:red" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></div>
-        </div>
 
-        <div class="mb-3">
-            <div class="col-md-2">
-                <label for="birthdate" class="form-label">Введите дату рождения: </label>
-                <input type="text" th:field="*{birthdate}" class="form-control" id="birthdate" placeholder="01.01.2023"/>
+            <div class="mb-3">
+                <div class="row">
+                    <label for="middleName" class="col-sm-3 col-form-label">Отчество (при наличии):</label>
+                    <div class="col-md-4">
+                        <input type="text" th:field="*{middleName}" class="form-control" id="middleName" placeholder="Иванович"/>
+                        <small class="text-muted">или оставьте поле пустым</small>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></div>
+                </div>
             </div>
-            <div style="color:red" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}"></div>
-        </div>
 
-        <div class="mb-3">
-            <label for="snils" class="form-label">Введите СНИЛС (при необходимости): </label>
-            <div class="col-md-2">
-                <input type="text" th:field="*{snils}" class="form-control" id="snils" placeholder="123-456-789 01"/>
-                <small class="text-muted">или оставьте поле пустым</small>
+            <div class="mb-3">
+                <div class="row">
+                    <label for="birthdate" class="col-sm-3 col-form-label">Дата рождения:</label>
+                    <div class="col-md-2">
+                        <input type="text" th:field="*{birthdate}" class="form-control" id="birthdate" placeholder="01.01.2023"/>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}"></div>
+                </div>
             </div>
-            <div style="color:red" th:if="${#fields.hasErrors('snils')}" th:errors="*{snils}"></div>
-        </div>
 
-        <div class="mb-3">
-            <label for="phoneNumber" class="form-label">Введите номер телефона (при необходимости): </label>
-            <div class="col-md-2">
-                <input type="tel" th:field="*{phoneNumber}" class="form-control" id="phoneNumber" placeholder="+79876543210"/>
-                <small class="text-muted">или оставьте поле пустым</small>
+            <div class="mb-3">
+                <div class="row">
+                    <label for="snils" class="col-sm-3 col-form-label">СНИЛС (при необходимости):</label>
+                    <div class="col-md-2">
+                        <input type="text" th:field="*{snils}" class="form-control" id="snils" placeholder="123-456-789 01"/>
+                        <small class="text-muted">или оставьте поле пустым</small>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('snils')}" th:errors="*{snils}"></div>
+                </div>
             </div>
-            <div style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
-        </div>
 
-        <input type="submit" class="btn btn-success" value="Создать"/>
+            <div class="mb-3">
+                <div class="row">
+                    <label for="phoneNumber" class="col-sm-3 col-form-label">Номер телефона (при необходимости):</label>
+                    <div class="col-md-2">
+                        <input type="tel" th:field="*{phoneNumber}" class="form-control" id="phoneNumber" placeholder="+79876543210"/>
+                        <small class="text-muted">или оставьте поле пустым</small>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset th:object="${passport}">
+            <h4 class="mb-4">Паспортные данные:</h4>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="citizenship" class="col-sm-3 col-form-label">Гражданство:</label>
+                    <div class="col-md-4">
+                        <select class="form-select" th:field="*{citizenship}" id="citizenship">
+                            <option th:each="citizenshipOpt : ${T(ru.example.model.enums.Citizenship).values()}"
+                                    th:value="${citizenshipOpt}" th:text="${citizenshipOpt.countryName}"
+                                    th:selected="${citizenshipOptStat.first}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('citizenship')}" th:errors="*{citizenship}"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="seriesNumber" class="col-sm-3 col-form-label">Серия и номер паспорта:</label>
+                    <div class="col-md-2">
+                        <input type="text" th:field="*{seriesNumber}" class="form-control" id="seriesNumber" placeholder="11 22 333444"/>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('seriesNumber')}" th:errors="*{seriesNumber}"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="sex" class="col-sm-3 col-form-label">Пол:</label>
+                    <div class="col-md-2">
+                        <select class="form-select" th:field="*{sex}" id="sex">
+                            <option th:each="sexOpt : ${T(ru.example.model.enums.Sex).values()}"
+                                    th:value="${sexOpt}" th:text="${sexOpt.translation}"
+                                    th:selected="${sexOptStat.first}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="birthplace" class="col-sm-3 col-form-label">Место рождения:</label>
+                    <div class="col-md-8">
+                        <textarea th:field="*{birthplace}" class="form-control" rows="2" id="birthplace" placeholder="гор. Москва"></textarea>
+                        <div style="color:red" th:if="${#fields.hasErrors('birthplace')}" th:errors="*{birthplace}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="issueDate" class="col-sm-3 col-form-label">Дата выдачи:</label>
+                    <div class="col-md-2">
+                        <input type="text" th:field="*{issueDate}" class="form-control" id="issueDate" placeholder="01.01.2023"/>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('issueDate')}" th:errors="*{issueDate}"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="departmentCode" class="col-sm-3 col-form-label">Код подразделения:</label>
+                    <div class="col-md-2">
+                        <input type="text" th:field="*{departmentCode}" class="form-control" id="departmentCode" placeholder="123-456"/>
+                    </div>
+                    <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('departmentCode')}" th:errors="*{departmentCode}"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="issuedBy" class="col-sm-3 col-form-label">Кем выдан:</label>
+                    <div class="col-md-8">
+                        <textarea th:field="*{issuedBy}" class="form-control" rows="2" id="issuedBy"
+                                  placeholder="отделением УФМС России по гор. Москве по району Хамовники"></textarea>
+                        <div style="color:red" th:if="${#fields.hasErrors('issuedBy')}" th:errors="*{issuedBy}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="row">
+                    <label for="registrationAddress" class="col-sm-3 col-form-label">Адрес регистрации:</label>
+                    <div class="col-md-8">
+                        <textarea th:field="*{registrationAddress}" class="form-control" rows="2" id="registrationAddress"
+                                  placeholder="Россия, Московская обл., г. Москва, ул. Усачёва, д. 0, кв. 0"></textarea>
+                        <div style="color:red" th:if="${#fields.hasErrors('registrationAddress')}" th:errors="*{registrationAddress}"></div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div style="text-align: center">
+            <input type="submit" class="btn btn-success" value="Создать"/>
+        </div>
     </form>
 </div>
 
