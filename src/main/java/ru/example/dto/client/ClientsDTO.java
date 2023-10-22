@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 public class ClientsDTO {
 
-    private int id;
+    private long id;
 
     private String lastName;
 

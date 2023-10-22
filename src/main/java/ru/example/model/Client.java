@@ -19,7 +19,7 @@ public class Client {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "last_name")
     private String lastName;

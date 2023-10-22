@@ -19,7 +19,7 @@ public class Action {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "operation_type")
@@ -33,6 +33,12 @@ public class Action {
 
     @Column(name = "operation_date_time")
     private LocalDateTime operationDateTime;
+
+    @Column(name = "sender_account_id")
+    private Long senderAccountId;
+
+    @Column(name = "receiver_account_id")
+    private Long receiverAccountId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")

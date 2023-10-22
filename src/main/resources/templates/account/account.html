@@ -59,6 +59,13 @@
             <input type="submit" class="btn btn-info" value="Снять деньги со счёта"/>
         </form>
 
+        <form th:method="GET"
+              th:action="@{/api/clients/{clientId}/accounts/{accountId}/transfer
+                                        (clientId=${clientId}, accountId=${account.id})}"
+              style="display: inline-block">
+            <input type="submit" class="btn btn-warning" value="Перевести деньги на другой счёт"/>
+        </form>
+
         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                 style="display: inline-block">Закрыть счёт
         </button>
@@ -86,8 +93,8 @@
             </div>
         </div>
 
-        <div class="alert alert-danger" role="alert" th:if="${closeAccountError}">
-            <p th:text="${closeAccountError}"></p>
+        <div class="alert alert-danger" role="alert" th:if="${accountClosingException}">
+            <p th:text="${accountClosingException}"></p>
         </div>
     </div>
 </div>

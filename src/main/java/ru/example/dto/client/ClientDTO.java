@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Setter
 public class ClientDTO {
 
-    private int id;
+    private long id;
 
     @NotNull(message = "Это поле не может быть пустым.")
     @Pattern(regexp = "^[А-ЯЁ][а-яё]{1,34}$", message = "Фамилия должна содержать от 2 до 35 символов, " +

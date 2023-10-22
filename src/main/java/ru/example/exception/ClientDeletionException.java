@@ -5,14 +5,14 @@ import lombok.Getter;
 import java.io.Serial;
 
 @Getter
-public class DeleteClientException extends RuntimeException {
+public class ClientDeletionException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final int clientId;
+    private final long clientId;
 
-    public DeleteClientException(String message, int clientId) {
+    public ClientDeletionException(String message, long clientId) {
         super(message);
         this.clientId = clientId;
     }

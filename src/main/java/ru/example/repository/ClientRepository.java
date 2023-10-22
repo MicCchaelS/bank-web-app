@@ -9,13 +9,13 @@ import ru.example.model.Client;
 import java.util.List;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Integer> {
+public interface ClientRepository extends JpaRepository<Client, Long> {
 
     boolean existsBySnils(String snils);
-    boolean existsBySnilsAndIdNot(String snils, int clientId);
+    boolean existsBySnilsAndIdNot(String snils, long clientId);
 
     boolean existsByPhoneNumber(String phoneNumber);
-    boolean existsByPhoneNumberAndIdNot(String phoneNumber, int clientId);
+    boolean existsByPhoneNumberAndIdNot(String phoneNumber, long clientId);
 
     @Query(value = """
             SELECT NEW ru.example.dto.client.ClientsDTO(

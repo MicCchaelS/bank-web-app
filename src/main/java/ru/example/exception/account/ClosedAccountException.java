@@ -1,4 +1,4 @@
-package ru.example.exception;
+package ru.example.exception.account;
 
 import java.io.Serial;
 

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.example.model.Action;
 
 @Repository
-public interface ActionRepository extends JpaRepository<Action, Integer> {
+public interface ActionRepository extends JpaRepository<Action, Long> {
 }

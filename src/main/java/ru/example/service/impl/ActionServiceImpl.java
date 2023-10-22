@@ -20,12 +20,50 @@ public class ActionServiceImpl implements ActionService {
 
     @Transactional
     @Override
-    public Action createNewAction(OperationType operationType, BigDecimal amount, BigDecimal reminder) {
+    public Action creatingAccountAction() {
+        return createNewAction(OperationType.ACCOUNT_CREATION, null, BigDecimal.ZERO, null,
+                null);
+    }
+
+    @Transactional
+    @Override
+    public Action replenishmentAccountAction(BigDecimal replenishmentAmount, BigDecimal reminder) {
+        return createNewAction(OperationType.REPLENISHMENT, replenishmentAmount, reminder,
+                null, null);
+    }
+
+    @Transactional
+    @Override
+    public Action withdrawalAccountAction(BigDecimal withdrawalAmount, BigDecimal reminder) {
+        return createNewAction(OperationType.WITHDRAWAL, withdrawalAmount, reminder,
+                null, null);
+    }
+
+    @Transactional
+    @Override
+    public Action transferAccountAction(OperationType operationType, BigDecimal transferAmount, BigDecimal reminder,
+                                        Long senderAccountId, Long receiverAccountId) {
+        return createNewAction(operationType, transferAmount, reminder, senderAccountId,
+                receiverAccountId);
+    }
+
+    @Transactional
+    @Override
+    public Action closingAccountAction(BigDecimal balance) {
+        return createNewAction(OperationType.ACCOUNT_CLOSING, null, balance, null,
+                null);
+    }
+
+    private Action createNewAction(OperationType operationType, BigDecimal amount, BigDecimal reminder,
+                                   Long senderAccountId, Long receiverAccountId) {
         var action = new Action();
         action.setOperationType(operationType);
         action.setAmount(amount);
         action.setReminder(reminder);
+        action.setSenderAccountId(senderAccountId);
+        action.setReceiverAccountId(receiverAccountId);
         action.setOperationDateTime(LocalDateTime.now());
+
         return action;
     }
 }

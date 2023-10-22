@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Setter
 public class PassportDTO {
 
-    private int id;
+    private long id;
 
     @NotNull(message = "Это поле не может быть пустым.")
     private Citizenship citizenship;

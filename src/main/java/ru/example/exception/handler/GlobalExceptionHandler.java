@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ru.example.exception.CloseAccountException;
-import ru.example.exception.ClosedAccountException;
-import ru.example.exception.DeleteClientException;
-import ru.example.exception.ResourceNotFoundException;
+import ru.example.exception.*;
+import ru.example.exception.account.AccountClosingException;
+import ru.example.exception.account.ClosedAccountException;
+import ru.example.exception.account.MoneyTransferException;
+import ru.example.exception.account.TooManyOpenAccountsException;
 
 @Slf4j
 @ControllerAdvice
@@ -21,15 +22,29 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public String handleException(ResourceNotFoundException e, Model model) {
         log.error(e.getMessage(), e);
-        model.addAttribute("error", e.getMessage());
-        return "error/error";
+        model.addAttribute("exception", e.getMessage());
+        return "exception/exception";
     }
 
-    @ExceptionHandler(DeleteClientException.class)
-    public String handleException(DeleteClientException e, RedirectAttributes redirectAttributes) {
+    @ExceptionHandler(ClientDeletionException.class)
+    public String handleException(ClientDeletionException e, RedirectAttributes redirectAttributes) {
         log.error(e.getMessage(), e);
-        redirectAttributes.addFlashAttribute("deleteClientError", e.getMessage());
+        redirectAttributes.addFlashAttribute("clientDeletionException", e.getMessage());
         return "redirect:/api/clients/" + e.getClientId();
+    }
+
+    @ExceptionHandler(TooManyOpenAccountsException.class)
+    public String handleException(TooManyOpenAccountsException e, Model model) {
+        log.error(e.getMessage(), e);
+        model.addAttribute("exception", e.getMessage());
+        return "exception/exception";
+    }
+
+    @ExceptionHandler(MoneyTransferException.class)
+    public String handleException(MoneyTransferException e, RedirectAttributes redirectAttributes) {
+        log.error(e.getMessage(), e);
+        redirectAttributes.addFlashAttribute("moneyTransferException", e.getMessage());
+        return "redirect:/api/clients/" + e.getClientId() + "/accounts/" + e.getAccountId() + "/transfer";
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -39,10 +54,10 @@ public class GlobalExceptionHandler {
         return new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(CloseAccountException.class)
-    public String handleException(CloseAccountException e, RedirectAttributes redirectAttributes) {
+    @ExceptionHandler(AccountClosingException.class)
+    public String handleException(AccountClosingException e, RedirectAttributes redirectAttributes) {
         log.error(e.getMessage(), e);
-        redirectAttributes.addFlashAttribute("closeAccountError", e.getMessage());
+        redirectAttributes.addFlashAttribute("accountClosingException", e.getMessage());
         return "redirect:/api/clients/" + e.getClientId() + "/accounts/" + e.getAccountId();
     }
 }

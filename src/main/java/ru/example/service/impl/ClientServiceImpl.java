@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.example.dto.client.ClientDTO;
 import ru.example.dto.client.ClientsDTO;
-import ru.example.exception.DeleteClientException;
+import ru.example.exception.ClientDeletionException;
 import ru.example.exception.ResourceNotFoundException;
 import ru.example.model.Client;
 import ru.example.model.enums.AccountStatus;
@@ -34,10 +34,10 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO findClientById(int id) {
+    public ClientDTO findClientById(long id) {
         return clientRepository.findById(id)
                 .map(client -> modelMapperUtil.map(client, ClientDTO.class))
-                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден."));
     }
 
     @Transactional
@@ -60,17 +60,17 @@ public class ClientServiceImpl implements ClientService {
 
     @Transactional
     @Override
-    public void deleteClient(int id) {
+    public void deleteClient(long id) {
         var client = clientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден."));
 
         var openAccountExists = client.getAccounts()
                 .stream()
                 .anyMatch(account -> account.getStatus() == AccountStatus.OPEN);
 
         if (openAccountExists) {
-            throw new DeleteClientException("Ошибка удаления клиента. " +
-                    "Сначала требуется закрыть все открытые банковские счета клиента", id);
+            throw new ClientDeletionException("Ошибка удаления клиента:" +
+                    " Для совершения этого действия клиенту необходимо закрыть все открытые банковские счета.", id);
         }
 
         passportService.deletePassportByClientId(id);

@@ -29,7 +29,7 @@
           th:action="@{/api/clients/{clientId}/accounts/{accountId}/withdraw
                                     (clientId=${clientId}, accountId=${account.id})}"
           th:object="${account}">
-        <input type="hidden" th:field="*{id}"><input type="hidden" th:field="*{accountNumber}"><input type="hidden" th:field="*{balance}"><input type="hidden" th:field="*{status}"><input type="hidden" th:field="*{operationType}">
+        <input type="hidden" th:field="*{id}"><input type="hidden" th:field="*{status}">
 
         <div class="fs-5" style="text-align: end">
             <div class="mb-3 row">
@@ -40,11 +40,12 @@
             </div>
 
             <div class="mb-3 row">
-                <label for="amount" class="col-sm-6 col-form-label">Введите сумму, которую требуется снять (Мин. 1 ₽):</label>
-                <div class="col-md-3">
-                    <input type="text" th:field="*{amount}" class="form-control" id="amount" placeholder="1000"/>
+                <label for="withdrawalAmount" class="col-sm-6 col-form-label">Введите сумму, которую требуется снять:</label>
+                <div class="col-md-3" style="text-align: left">
+                    <input type="text" th:field="*{withdrawalAmount}" class="form-control" id="withdrawalAmount" placeholder="1000"/>
+                    <small class="text-muted" style="font-size: 14px">От 1 ₽ до 500 000 000 ₽</small>
                 </div>
-                <div style="color:red; text-align: center" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+                <div class="fs-6" style="color:red; text-align: center" th:if="${#fields.hasErrors('withdrawalAmount')}" th:errors="*{withdrawalAmount}"></div>
             </div>
         </div>
 

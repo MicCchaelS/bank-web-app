@@ -31,7 +31,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public String findClientAndPassportByClientId(@PathVariable("id") int id, Model model) {
+    public String findClientAndPassportByClientId(@PathVariable("id") long id, Model model) {
         model.addAttribute("client", clientService.findClientById(id));
         model.addAttribute("passport", passportService.findPassportByClientId(id));
         return "client/client";
@@ -61,10 +61,10 @@ public class ClientController {
         return "redirect:/api/clients/" + client.getId();
     }
 
-    private int passportId;
+    private long passportId;
 
     @GetMapping("/{id}/edit")
-    public String showEditClientPassportPage(@PathVariable("id") int id, Model model) {
+    public String showEditClientPassportPage(@PathVariable("id") long id, Model model) {
         model.addAttribute("client", clientService.findClientById(id));
 
         PassportDTO passportDTO = passportService.findPassportByClientId(id);
@@ -92,7 +92,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteClientAndPassport(@PathVariable("id") int id) {
+    public String deleteClientAndPassport(@PathVariable("id") long id) {
         clientService.deleteClient(id);
         return "redirect:/api/clients";
     }

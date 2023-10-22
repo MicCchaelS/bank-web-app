@@ -9,8 +9,8 @@ import java.util.List;
 public interface ClientService {
 
     List<ClientsDTO> findSpecificClientsPassportsFields();
-    ClientDTO findClientById(int id);
+    ClientDTO findClientById(long id);
     Client saveClient(ClientDTO clientDTO);
     void updateClient(ClientDTO clientDTO);
-    void deleteClient(int id);
+    void deleteClient(long id);
 }

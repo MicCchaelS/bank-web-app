@@ -42,14 +42,14 @@ public class ClientDTOValidator implements Validator {
         // Если СНИЛС был указан и уже используется
         if (!snils.isEmpty()) {
             if (clientRepository.existsBySnils(snils)) {
-                errors.rejectValue("snils", "", "Этот СНИЛС уже используется");
+                errors.rejectValue("snils", "", "Этот СНИЛС уже используется.");
             }
         }
 
         // Если номер телефона был указан и уже используется
         if (!phoneNumber.isEmpty()) {
             if (clientRepository.existsByPhoneNumber(phoneNumber)) {
-                errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется");
+                errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется.");
             }
         }
     }
@@ -63,14 +63,14 @@ public class ClientDTOValidator implements Validator {
         // Если СНИЛС был указан и уже используется (без учёта текущего СНИЛСа клиента)
         if (!snils.isEmpty()) {
             if (clientRepository.existsBySnilsAndIdNot(snils, clientId)) {
-                errors.rejectValue("snils", "", "Этот СНИЛС уже используется");
+                errors.rejectValue("snils", "", "Этот СНИЛС уже используется.");
             }
         }
 
         // Если номер телефона был указан и уже используется (без учёта текущего номера телефона клиента)
         if (!phoneNumber.isEmpty()) {
             if (clientRepository.existsByPhoneNumberAndIdNot(phoneNumber, clientId)) {
-                errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется");
+                errors.rejectValue("phoneNumber", "", "Этот номер телефона уже используется.");
             }
         }
     }

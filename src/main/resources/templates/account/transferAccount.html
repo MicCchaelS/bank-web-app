@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Пополнение счёта</title>
+    <title>Перевод на другой счёт</title>
 
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}"/>
 </head>
@@ -23,15 +23,22 @@
 </nav>
 
 <div class="container mt-4" style="text-align: center">
-    <h2 class="mb-4">Пополнение счёта</h2>
+    <h2 class="mb-4">Перевод на другой счёт</h2>
 
     <form th:method="PATCH"
-          th:action="@{/api/clients/{clientId}/accounts/{accountId}/top-up
+          th:action="@{/api/clients/{clientId}/accounts/{accountId}/transfer
                                 (clientId=${clientId}, accountId=${account.id})}"
           th:object="${account}">
         <input type="hidden" th:field="*{id}"><input type="hidden" th:field="*{status}">
 
         <div class="fs-5" style="text-align: end">
+            <div class="mb-3 row">
+                <label for="accountNumber" class="col-sm-6 col-form-label">Номер счёта:</label>
+                <div class="col-md-3">
+                    <input type="text" th:field="*{accountNumber}" readonly class="form-control-plaintext" id="accountNumber"/>
+                </div>
+            </div>
+
             <div class="mb-3 row">
                 <label for="balance" class="col-sm-6 col-form-label">Баланс ₽:</label>
                 <div class="col-md-3">
@@ -40,16 +47,28 @@
             </div>
 
             <div class="mb-3 row">
-                <label for="replenishmentAmount" class="col-sm-6 col-form-label">Введите сумму, которую требуется зачислить:</label>
+                <label for="receiverAccountNumber" class="col-sm-6 col-form-label">Введите номер счёта получателя:</label>
+                <div class="col-md-3">
+                    <input type="text" th:field="*{receiverAccountNumber}" class="form-control" id="receiverAccountNumber" placeholder="12345678901234567890"/>
+                </div>
+                <div class="fs-6" style="color:red; text-align: center" th:if="${#fields.hasErrors('receiverAccountNumber')}" th:errors="*{receiverAccountNumber}"></div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="transferAmount" class="col-sm-6 col-form-label">Введите сумму перевода:</label>
                 <div class="col-md-3" style="text-align: left">
-                    <input type="text" th:field="*{replenishmentAmount}" class="form-control" id="replenishmentAmount" placeholder="1000"/>
+                    <input type="text" th:field="*{transferAmount}" class="form-control" id="transferAmount" placeholder="1000"/>
                     <small class="text-muted" style="font-size: 14px">От 10 ₽ до 500 000 000 ₽</small>
                 </div>
-                <div class="fs-6" style="color:red; text-align: center" th:if="${#fields.hasErrors('replenishmentAmount')}" th:errors="*{replenishmentAmount}"></div>
+                <div class="fs-6" style="color:red; text-align: center" th:if="${#fields.hasErrors('transferAmount')}" th:errors="*{transferAmount}"></div>
+            </div>
+
+            <div class="alert alert-danger fs-6" style="text-align: center" role="alert" th:if="${moneyTransferException}">
+                <p th:text="${moneyTransferException}"></p>
             </div>
         </div>
 
-        <input type="submit" class="btn btn-success" value="Пополнить"/>
+        <input type="submit" class="btn btn-success" value="Перевести"/>
     </form>
 </div>
 

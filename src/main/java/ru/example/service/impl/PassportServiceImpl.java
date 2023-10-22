@@ -23,10 +23,10 @@ public class PassportServiceImpl implements PassportService {
     private final ModelMapperUtil modelMapperUtil;
 
     @Override
-    public PassportDTO findPassportByClientId(int clientId) {
+    public PassportDTO findPassportByClientId(long clientId) {
         return passportRepository.findByClientId(clientId)
                 .map(passport -> modelMapperUtil.map(passport, PassportDTO.class))
-                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Паспорт не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Паспорт не найден."));
     }
 
     @Transactional
@@ -48,12 +48,12 @@ public class PassportServiceImpl implements PassportService {
 
     @Transactional
     @Override
-    public void deletePassportByClientId(int clientId) {
+    public void deletePassportByClientId(long clientId) {
         passportRepository.findByClientId(clientId)
                 .ifPresentOrElse(
                         passportRepository::delete,
                         () -> {
-                            throw new ResourceNotFoundException("Ошибка: Паспорт не найден");
+                            throw new ResourceNotFoundException("Ошибка: Паспорт не найден.");
                         }
                 );
     }

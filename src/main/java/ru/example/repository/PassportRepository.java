@@ -7,10 +7,10 @@ import ru.example.model.Passport;
 import java.util.Optional;
 
 @Repository
-public interface PassportRepository extends JpaRepository<Passport, Integer> {
+public interface PassportRepository extends JpaRepository<Passport, Long> {
 
-    Optional<Passport> findByClientId(int clientId);
+    Optional<Passport> findByClientId(long clientId);
 
     boolean existsBySeriesNumber(String seriesNumber);
-    boolean existsBySeriesNumberAndIdNot(String seriesNumber, int passportId);
+    boolean existsBySeriesNumberAndIdNot(String seriesNumber, long passportId);
 }
