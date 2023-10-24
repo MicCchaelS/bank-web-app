@@ -45,7 +45,7 @@
                     <label for="middleName" class="col-sm-3 col-form-label">Отчество (при наличии):</label>
                     <div class="col-md-4">
                         <input type="text" th:field="*{middleName}" class="form-control" id="middleName" placeholder="Иванович"/>
-                        <small class="text-muted">или оставьте поле пустым</small>
+                        <small class="text-muted" style="font-size: 12px">или оставьте поле пустым</small>
                     </div>
                     <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('middleName')}" th:errors="*{middleName}"></div>
                 </div>
@@ -66,7 +66,7 @@
                     <label for="snils" class="col-sm-3 col-form-label">СНИЛС (при необходимости):</label>
                     <div class="col-md-2">
                         <input type="text" th:field="*{snils}" class="form-control" id="snils" placeholder="123-456-789 01"/>
-                        <small class="text-muted">или оставьте поле пустым</small>
+                        <small class="text-muted" style="font-size: 12px">или оставьте поле пустым</small>
                     </div>
                     <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('snils')}" th:errors="*{snils}"></div>
                 </div>
@@ -77,7 +77,7 @@
                     <label for="phoneNumber" class="col-sm-3 col-form-label">Номер телефона (при необходимости):</label>
                     <div class="col-md-2">
                         <input type="tel" th:field="*{phoneNumber}" class="form-control" id="phoneNumber" placeholder="+79876543210"/>
-                        <small class="text-muted">или оставьте поле пустым</small>
+                        <small class="text-muted" style="font-size: 12px">или оставьте поле пустым</small>
                     </div>
                     <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
                 </div>

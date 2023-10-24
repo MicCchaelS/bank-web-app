@@ -55,9 +55,9 @@ public class AccountServiceImpl implements AccountService {
         var client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ошибка: Клиент не найден."));
 
-        if (client.getAccounts().size() >= 10) {
+        if (accountRepository.countByClientIdAndStatus(clientId, AccountStatus.OPEN) >= 10) {
             throw new TooManyOpenAccountsException("Ошибка создания банковского счёта:" +
-                    " клиент не может иметь больше 10 открытых счетов.");
+                    " Клиент не может иметь больше 10 открытых счетов.");
         }
 
         var account = createNewAccount();
@@ -124,10 +124,10 @@ public class AccountServiceImpl implements AccountService {
         receiverAccount.setBalance(receiverAccountNewBalance);
 
         var senderAccountAction = actionService.transferAccountAction(OperationType.TRANSFER_SENDING, transferAmount,
-                senderAccount.getBalance(), (long) senderAccount.getId(), (long) receiverAccount.getId());
+                senderAccount.getBalance(), senderAccount.getId(), receiverAccount.getId());
 
         var receiverAccountAction = actionService.transferAccountAction(OperationType.TRANSFER_RECEIVING, transferAmount,
-                receiverAccount.getBalance(), (long) senderAccount.getId(), (long) receiverAccount.getId());
+                receiverAccount.getBalance(), senderAccount.getId(), receiverAccount.getId());
 
         senderAccount.addAction(senderAccountAction);
         receiverAccount.addAction(receiverAccountAction);
