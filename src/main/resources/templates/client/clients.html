@@ -8,13 +8,46 @@
 </head>
 <body style="text-align: center" class="bg-success p-2 text-dark bg-opacity-25">
 
-<header>
-    <h2 class="mb-4">Клиенты банка</h2>
-</header>
+<h4 style="text-align: center">Фильтрация и поиск по:</h4>
 
 <div class="container mt-4">
+    <form th:method="GET" th:action="@{/api/clients}">
+        <div class="mb-3">
+            <div class="row">
+                <label for="lastName" class="col-sm-3 col-form-label">фамилии:</label>
+                <div class="col-md-3">
+                    <input type="text" th:field="${filter.lastName}" class="form-control" id="lastName" placeholder="Иванов"/>
+                </div>
+
+                <label for="firstName" class="col-sm-3 col-form-label">имени:</label>
+                <div class="col-md-3">
+                    <input type="text" th:field="${filter.firstName}" class="form-control" id="firstName" placeholder="Иван"/>
+                </div>
+
+                <label for="middleName" class="col-sm-3 col-form-label">отчеству:</label>
+                <div class="col-md-3">
+                    <input type="text" th:field="${filter.middleName}" class="form-control" id="middleName" placeholder="Иванович"/>
+                </div>
+
+                <label for="seriesNumber" class="col-sm-3 col-form-label">серии и номеру паспорта:</label>
+                <div class="col-md-2">
+                    <input type="text" th:field="${filter.seriesNumber}" class="form-control" id="seriesNumber" placeholder="11 22 333444"/>
+                </div>
+
+                <div class="col-auto" style="color: red" th:if="${#fields.hasErrors('filter.lastName')}" th:errors="${filter.lastName}"></div>
+                <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('filter.firstName')}" th:errors="${filter.firstName}"></div>
+                <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('filter.middleName')}" th:errors="${filter.middleName}"></div>
+                <div class="col-auto" style="color:red" th:if="${#fields.hasErrors('filter.seriesNumber')}" th:errors="${filter.seriesNumber}"></div>
+            </div>
+
+            <input type="submit" class="btn btn-secondary" value="Фильтровать"/>
+        </div>
+    </form>
+
+    <h2 class="mb-4">Клиенты банка</h2>
+
     <div th:if="${clients.isEmpty()}" class="fs-5 mb-3">
-        <p>Список клиентов пуст</p>
+        <p>Список клиентов пуст или совпадений не найдено</p>
     </div>
 
     <form th:method="GET" th:action="@{/api/clients/new}" class="mb-3">

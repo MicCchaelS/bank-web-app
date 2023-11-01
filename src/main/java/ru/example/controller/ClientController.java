@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.example.dto.client.ClientDTO;
+import ru.example.dto.client.ClientsFilterDTO;
 import ru.example.dto.passport.PassportDTO;
 import ru.example.service.ClientService;
 import ru.example.service.PassportService;
@@ -25,8 +26,20 @@ public class ClientController {
     private final PassportDTOValidator passportDTOValidator;
 
     @GetMapping
-    public String findSpecificClientsPassportsFields(Model model) {
-        model.addAttribute("clients", clientService.findSpecificClientsPassportsFields());
+    public String findAllClientsPassports(@ModelAttribute("filter") @Valid ClientsFilterDTO clientsFilterDTO,
+                                          BindingResult bindingResult,
+                                          Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clients", clientService.findAllClientsAndPassports());
+            return "client/clients";
+        }
+
+        if (clientsFilterDTO.getLastName() == null) {
+            model.addAttribute("clients", clientService.findAllClientsAndPassports());
+        } else {
+            model.addAttribute("clients", clientService.findAllClientsAndPassportsByFilter(clientsFilterDTO));
+        }
+
         return "client/clients";
     }
 

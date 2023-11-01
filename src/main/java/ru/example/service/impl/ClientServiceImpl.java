@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.example.dto.client.ClientDTO;
 import ru.example.dto.client.ClientsDTO;
+import ru.example.dto.client.ClientsFilterDTO;
 import ru.example.exception.ClientDeletionException;
 import ru.example.exception.ResourceNotFoundException;
 import ru.example.model.Client;
@@ -29,8 +30,13 @@ public class ClientServiceImpl implements ClientService {
     private final PassportService passportService;
 
     @Override
-    public List<ClientsDTO> findSpecificClientsPassportsFields() {
-        return clientRepository.findClientsWithPassports();
+    public List<ClientsDTO> findAllClientsAndPassports() {
+        return clientRepository.findAllClientsAndPassports();
+    }
+
+    @Override
+    public List<ClientsDTO> findAllClientsAndPassportsByFilter(ClientsFilterDTO clientsFilterDTO) {
+        return clientRepository.findAllClientsAndPassportsByFilter(clientsFilterDTO);
     }
 
     @Override
